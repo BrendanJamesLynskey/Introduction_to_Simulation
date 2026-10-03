@@ -84,6 +84,7 @@ Single self-contained `index.html` (the demo is plain JavaScript inside it) — 
 - [Signal Integrity](https://github.com/BrendanJamesLynskey/Signal_Integrity) — seventeen decks computed by a 2-D field solver and circuit models.
 - [SystemVerilog_Simulators](https://github.com/BrendanJamesLynskey/SystemVerilog_Simulators) — what actually runs in the free RTL simulators.
 - [DCDC_Control_Techniques](https://github.com/BrendanJamesLynskey/DCDC_Control_Techniques) — the power converters whose simulation the circuit slides discuss.
+- [Interview_Simulation](https://github.com/BrendanJamesLynskey/Interview_Simulation) — interview questions with worked answers, tested coding challenges and quizzes on simulation and performance modelling; its answers link back to these slides.
 - Indexes: [Hardware](https://github.com/BrendanJamesLynskey/Hardware) · [Software](https://github.com/BrendanJamesLynskey/Software) · [Mathematics](https://github.com/BrendanJamesLynskey/Mathematics).
 
 ## References
