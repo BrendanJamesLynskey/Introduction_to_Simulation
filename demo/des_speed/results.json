@@ -1,0 +1,20 @@
+[
+ {
+  "fast_path": false,
+  "requests": 3000,
+  "events": 90766,
+  "simulated_s": 770.9,
+  "wall_s": 0.923,
+  "events_per_s": 98342,
+  "sim_s_per_wall_s": 835.2
+ },
+ {
+  "fast_path": true,
+  "requests": 3000,
+  "events": 49699,
+  "simulated_s": 770.9,
+  "wall_s": 0.492,
+  "events_per_s": 100991,
+  "sim_s_per_wall_s": 1566.5
+ }
+]

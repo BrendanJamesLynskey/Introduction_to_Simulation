@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction to Simulation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Geist+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+<style>
+  :root {
+    --amber:  #dcad61;
+    --green:  #a9cd8e;
+    --purple: #ba9ecc;
+    --blue:   #73b9b4;
+    --red:    #d77753;
+    --bg:     #1c1815;
+    --bg2:    #231e1a;
+    --bg3:    #29241f;
+    --border: #403831;
+    --text:   #ede5d9;
+    --muted:  #988d82;
+  }
+
+  .reveal-viewport { background: var(--bg); }
+  .reveal .slides section { background: transparent; }
+
+  .reveal { font-family: 'Instrument Sans', sans-serif; color: var(--text); }
+  .reveal h1, .reveal h2, .reveal h3 { font-family: 'Bricolage Grotesque', serif; font-weight: 700; }
+  .reveal h1 { font-size: 1.6em; color: var(--amber); line-height: 1.1; }
+  .reveal h2 { font-size: 1.1em; color: var(--amber); margin-bottom: .2em; }
+  .reveal h3 { font-size: .78em; color: var(--green); margin-bottom: .15em; }
+  .reveal p  { font-size: .56em; line-height: 1.45; color: var(--text); }
+  .reveal li { font-size: .54em; line-height: 1.45; margin-bottom: .1em; }
+  .reveal code { font-family: 'Geist Mono', monospace; font-size: .72em; }
+  .reveal pre  { box-shadow: none; background: var(--bg3); border: 1px solid var(--border);
+                 border-radius: 6px; padding: .3em .5em; margin: .25em 0; }
+  .reveal pre code { font-size: .52em; line-height: 1.35; background: transparent; color: #dfd7cb; }
+
+  /* ── slide chrome ── */
+  .slide-hdr {
+    display: flex; align-items: center; gap: .4em;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: .2em; margin-bottom: .3em;
+  }
+  .slide-hdr .tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: .42em; font-weight: 500;
+    color: var(--bg); background: var(--amber);
+    padding: .1em .4em; border-radius: 3px;
+    letter-spacing: .04em;
+  }
+  .slide-hdr h2 { margin: 0; font-size: .95em; }
+
+  /* ── two-column ── */
+  .cols   { display: grid; gap: .5em; }
+  .cols-2 { grid-template-columns: 1fr 1fr; }
+  .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .cols-6040 { grid-template-columns: 6fr 4fr; }
+  .cols-4060 { grid-template-columns: 4fr 6fr; }
+
+  /* ── cards ── */
+  .card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 6px; padding: .35em .6em;
+  }
+  .card.amber { border-left: 3px solid var(--amber); }
+  .card.green { border-left: 3px solid var(--green); }
+  .card.purple{ border-left: 3px solid var(--purple); }
+  .card.blue  { border-left: 3px solid var(--blue); }
+  .card.red   { border-left: 3px solid var(--red); }
+  .card h3 { font-size: .64em; margin: 0 0 .12em; }
+  .card p  { font-size: .52em; margin: 0; color: #c8bfb3; }
+  .card ul { margin: 0; padding-left: 1em; }
+  .card li { font-size: .52em; color: #c8bfb3; margin-bottom: .02em; }
+
+  /* ── table ── */
+  .reveal table { width: 100%; border-collapse: collapse; font-size: .5em; }
+  .reveal table th { background: var(--bg3); color: var(--amber); font-weight: 600;
+                     padding: .2em .4em; border: 1px solid var(--border); text-align: left; }
+  .reveal table td { padding: .18em .4em; border: 1px solid var(--border); color: #d7cec2; }
+  .reveal table tr:nth-child(even) td { background: #211c19; }
+
+  /* ── accent spans ── */
+  .a  { color: var(--amber); font-weight: 600; }
+  .g  { color: var(--green); font-weight: 600; }
+  .p  { color: var(--purple); font-weight: 600; }
+  .b  { color: var(--blue); font-weight: 600; }
+  .r  { color: var(--red); font-weight: 600; }
+  .mono { font-family: 'Geist Mono', monospace; }
+
+  /* ── SVG graph diagrams ── */
+  svg.diagram { display: block; margin: 0 auto; overflow: visible; }
+
+  /* ── pill badges ── */
+  .pill {
+    display: inline-block; font-family: 'Geist Mono', monospace;
+    font-size: .44em; padding: .08em .4em; border-radius: 99px;
+    border: 1px solid; margin: 0 .08em;
+  }
+  .pill.amber { color: var(--amber); border-color: var(--amber); }
+  .pill.green { color: var(--green); border-color: var(--green); }
+  .pill.purple{ color: var(--purple); border-color: var(--purple); }
+  .pill.blue  { color: var(--blue); border-color: var(--blue); }
+
+  /* ── footer — hidden; was overlapping scrollable content ── */
+  .reveal .slide-footer { display: none; }
+  /* title slide special */
+  .title-slide h1 { font-size: 1.8em; }
+  .title-slide .subtitle {
+    font-size: .7em; color: var(--green); font-family: 'Instrument Sans', sans-serif;
+    font-weight: 300; letter-spacing: .04em; margin: .3em 0 .6em;
+  }
+  .title-slide .meta { font-size: .48em; color: var(--muted); font-family: 'Geist Mono', monospace; }
+
+  /* ── super-step animator ── */
+  .ss-row {
+    display: flex; gap: .25em; align-items: center;
+    margin: .1em 0; font-size: .55em; font-family: 'Geist Mono', monospace;
+  }
+  .ss-node {
+    padding: .2em .55em; border-radius: 5px; font-size: .9em;
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+  }
+  .ss-node.active { background: #33362a; border-color: var(--green); color: var(--green); }
+  .ss-node.done   { background: #2c2621; border-color: var(--purple); color: var(--purple); }
+  .ss-arrow { color: var(--amber); }
+  .ss-label { font-size: .8em; color: var(--muted); margin-left: .3em; }
+
+  /* reduce default margins */
+  .reveal ul, .reveal ol { margin: .15em 0 .15em 1em; }
+.reveal .slides > section { display: flex !important; flex-direction: column !important; overflow-y: auto !important; align-items: stretch !important; justify-content: flex-start !important; }
+
+  /* ── screenshots and captions ── */
+  .shot { display: block; width: 100%; height: auto; border: 1px solid var(--border); border-radius: 6px; margin: .15em 0; }
+  .reveal p.cap { font-size: .4em; color: var(--muted); line-height: 1.35; margin: .2em 0 .3em; }
+  .reveal a { color: var(--blue); }
+  .reveal pre code { font-size: .46em; }
+  .reveal h3 .pill { vertical-align: middle; }
+  .reveal pre code { max-height: none; white-space: pre-wrap !important; }
+  .dense .card li, .dense .card p, .dense p.cap { font-size: .44em; }
+  .dense .card h3 { font-size: .58em; }
+  .dense .card { padding: .25em .5em; }
+  .dense h3 { font-size: .6em; }
+  .reveal h3 .pill { vertical-align: middle; }
+  .reveal table.tight { font-size: .44em; }
+  .reveal table.tight td, .reveal table.tight th { padding: .12em .3em; }
+  /* ── "on this GitHub" box ── */
+  .card.gh { border: 1px dashed var(--green); border-left: 3px solid var(--green); }
+  .card.gh h3 { color: var(--green); }
+  .card.gh li { font-size: .46em; }
+  .eq { font-family: 'Geist Mono', monospace; font-size: .5em; color: var(--text); background: var(--bg3);
+        border: 1px solid var(--border); border-radius: 5px; padding: .25em .5em; margin: .2em 0; }
+  .src { font-size: .38em !important; color: var(--muted) !important; line-height: 1.35; margin-top: .3em !important; }
+  /* ── part dividers ── */
+  .part h1 { font-size: 1.5em; }
+  .part .lead { font-size: .66em; color: var(--muted); max-width: 820px; }
+  /* ── interactive demo ── */
+  .demo-ctl { display: flex; gap: .8em; flex-wrap: wrap; align-items: center; font-size: .46em; margin: .2em 0 .3em; }
+  .demo-ctl label { color: var(--muted); }
+  .demo-ctl input[type=range] { width: 170px; vertical-align: middle; }
+  .demo-ctl output { font-family: 'Geist Mono', monospace; color: var(--amber); min-width: 4.5em; display: inline-block; }
+  .demo-ctl select { font-size: 1em; background: var(--bg3); color: var(--text); border: 1px solid var(--border); border-radius: 4px; }
+  #rc-table tr.sel td { background: var(--bg3); color: var(--amber); }
+  #rc-plot { display: block; width: 100%; height: auto; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; }
+  @media (max-width: 600px) { .demo-ctl input[type=range] { width: 120px; } }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+
+<!-- ═══════════════════════════════ SLIDE 01 — TITLE ═══════════════════════════════ -->
+<section class="title-slide" data-background-color="#1c1815">
+  <div style="text-align:left; max-width:860px; margin:0 auto; padding: 1em 0;">
+    <div style="font-family:'Geist Mono',monospace; font-size:.5em; color:var(--muted); margin-bottom:.4em; letter-spacing:.1em;">
+      TECHNICAL PRESENTATION
+    </div>
+    <h1>Introduction to<br>Simulation</h1>
+    <div class="subtitle">How engineers simulate, from field solvers to cloud systems</div>
+    <div style="width:60px; height:3px; background:var(--amber); margin-bottom:1.4em;"></div>
+    <div style="display:flex; gap:1.2em; flex-wrap:wrap; margin-bottom:1em;">
+      <span class="pill amber">Numerical methods</span>
+      <span class="pill green">Circuits &amp; logic</span>
+      <span class="pill purple">Architecture</span>
+      <span class="pill blue">Systems</span>
+    </div>
+    <div class="ss-row" style="margin-top:0.6em; flex-wrap:wrap;">
+      <span class="ss-node active">Fields</span>
+      <span class="ss-arrow">→</span>
+      <span class="ss-node active">Circuits</span>
+      <span class="ss-arrow">→</span>
+      <span class="ss-node active">Logic</span>
+      <span class="ss-arrow">→</span>
+      <span class="ss-node done">Architecture</span>
+      <span class="ss-arrow">→</span>
+      <span class="ss-node done">Systems</span>
+      <span class="ss-arrow">→</span>
+      <span class="ss-node done">Software</span>
+    </div>
+    <p style="max-width:680px; color:#b2a89c; font-size:.56em; line-height:1.5; margin-top:1em;">
+      Six levels of simulation, the methods they share, and how to choose between them, with a link at every level into working simulators and decks on this GitHub
+    </p>
+    <div class="meta" style="margin-top:1.4em;">
+      Model &nbsp;·&nbsp; Solve &nbsp;·&nbsp; Measure &nbsp;·&nbsp; Validate
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 02 — TOPICS ═══════════════════════════════ -->
+<section data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">01</span>
+    <h2>Topics</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Part I: the levels</h3>
+        <ul>
+          <li>What a simulation is; the levels at a glance</li>
+          <li>Level 1: physics and numerical methods (FEM, FDTD, MoM, CFD, TCAD)</li>
+          <li>Level 2: circuits (SPICE, switching simulators, IBIS and IBIS-AMI)</li>
+          <li>Level 3: digital logic (event-driven, cycle-based, gate level, emulation, FPGA prototypes)</li>
+          <li>Level 4: architecture (analytical, discrete-event, transaction-level, cycle-level)</li>
+          <li>Level 5: system, network and cloud (DES at scale, queueing, Monte Carlo)</li>
+          <li>Level 6: software virtual platforms (ISS, QEMU, virtual prototypes)</li>
+          <li>One accelerator, every level</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3 class="g">Part II: cross-cutting methods</h3>
+        <ul>
+          <li>Time-stepping and event-driven</li>
+          <li>Stiffness, stability and step control</li>
+          <li>Interactive: one circuit, four solvers</li>
+          <li>Deterministic and stochastic; seeds and <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-warmup">replications</a></li>
+          <li>Co-simulation and hardware-in-the-loop</li>
+          <li>Digital twins, defined carefully</li>
+          <li>Verification, validation and calibration</li>
+          <li>Speed, accuracy and effort; how to choose a level</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:0.5em;">
+        <h3 class="b">How to read it</h3>
+        <p>Each level stands on its own, then ends with an <span class="g">On this GitHub</span> box that links the decks and code going deeper. Concepts the simulation series already explain link to their glossary entries in the <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#glossary">LLM Inference Simulators</a>, <a href="https://brendanjameslynskey.github.io/FHE_Hub_Accelerator_Simulators/#glossary">FHE Accelerator Simulators</a> and <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#glossary">Simulation Engineering Toolkit</a> hubs; the rest are explained on the slide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 03 — WHAT A SIMULATION IS ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">02</span>
+    <h2>What a Simulation Is</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">A model, run forward</h3>
+        <p>A simulation advances a model of a system through time, or across many parameter settings, to predict behaviour that you cannot measure, or would rather not. Every simulator has the same parts:</p>
+        <ul>
+          <li><span class="a">State</span>: node voltages, field values, register contents, queue lengths</li>
+          <li><span class="a">Rules</span> for how the state changes: differential equations, logic, or event handlers</li>
+          <li><span class="a">Inputs</span>: stimulus, a workload, random arrivals</li>
+          <li>A <span class="a">solver</span> or kernel that advances time</li>
+          <li><span class="a">Observers</span> that turn the run into metrics</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Why simulate</h3>
+        <ul>
+          <li>The thing does not exist yet: a chip is designed years before silicon (<a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-01">InfSim 01, the pre-silicon problem</a>)</li>
+          <li>Testing it is too slow, costly or dangerous</li>
+          <li>You cannot see inside it: the current in a via, the occupancy of a queue</li>
+          <li>You want a thousand what-ifs, not one</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Four words that get confused</h3>
+        <ul>
+          <li><span class="p">Analysis</span>: a closed-form or static answer with no time evolution: a DC operating point, a <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-roofline">roofline</a>, static timing analysis</li>
+          <li><span class="p">Simulation</span>: a model advanced through time or events in software</li>
+          <li><span class="p">Emulation</span>: the design, or a functional equivalent, executing on other hardware: a hardware emulator running RTL, QEMU running another CPU's binaries</li>
+          <li><span class="p">Prototype</span>: the real design in a different implementation, such as RTL on FPGAs</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Three questions every simulator answers</h3>
+        <ol style="padding-left:1.2em;">
+          <li>What is the state, and how much detail does it keep? (Part I)</li>
+          <li>How does time advance: fixed steps, adaptive steps, or events?</li>
+          <li>How do you know the answer is right: verification and validation?</li>
+        </ol>
+        <p style="margin-top:.2em;">Questions 2 and 3 are the same at every level, which is why Part II exists.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 04 — LEVELS AT A GLANCE ═══════════════════════════════ -->
+<section data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">03</span>
+    <h2>The Levels at a Glance</h2>
+  </div>
+  <table class="tight">
+    <tr><th>Level</th><th>What is solved</th><th>How time advances</th><th>Unit of time · unit of data</th><th>Typical methods</th></tr>
+    <tr><td><span class="a">1 Physics</span></td><td>Partial differential equations over a mesh: Maxwell, Navier&ndash;Stokes, heat, drift&ndash;diffusion</td><td>Fixed steps (stability-limited), or one solve per frequency</td><td>fs to ms · mesh cells</td><td>FDTD, FEM, MoM, CFD, TCAD</td></tr>
+    <tr><td><span class="a">2 Circuit</span></td><td>Kirchhoff's laws plus device models: differential-algebraic equations</td><td>Adaptive implicit steps; breakpoints at source corners</td><td>ps to ms · node voltages</td><td>SPICE, switching (PWL) simulators, IBIS, IBIS-AMI</td></tr>
+    <tr><td><span class="g">3 Digital logic</span></td><td>Boolean or four-state logic, with or without delays</td><td>Events (signal changes) or one evaluation per clock</td><td>ps or cycles · signals</td><td>RTL and gate-level simulation, emulation, FPGA prototypes</td></tr>
+    <tr><td><span class="p">4 Architecture</span></td><td>Pipelines, caches, memories, interconnect, accelerators</td><td>Cycles, transactions or events; or no time at all</td><td>cycles to &micro;s · transactions</td><td><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-roofline">Roofline</a>, discrete-event, SystemC TLM, cycle-level</td></tr>
+    <tr><td><span class="b">5 System</span></td><td>Requests, packets, jobs, agents, failures</td><td>Events; random sampling</td><td>&micro;s to hours · requests</td><td>DES, queueing networks, network simulators, Monte Carlo, agent-based</td></tr>
+    <tr><td><span class="b">6 Software</span></td><td>Instructions on a modelled CPU with its peripherals</td><td>Instructions, in blocks or time quanta</td><td>instructions · architectural state</td><td>Instruction-set simulators, QEMU, virtual prototypes</td></tr>
+  </table>
+  <div class="cols cols-2" style="margin-top:.5em;">
+    <div class="card amber">
+      <h3 class="a">Going up the table</h3>
+      <p>Each level throws away detail that the level below keeps, and gains speed and reach in exchange: a field solver can afford nanoseconds of a connector; a system simulator can afford hours of a data centre. The hand-over between levels is a reduced model: S-parameters, a compact device model, a cycle count, a cost model.</p>
+    </div>
+    <div class="card gh">
+      <h3>On this GitHub</h3>
+      <ul>
+        <li><a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-03">InfSim 01: The Fidelity Ladder</a> zooms into levels 3&ndash;4 for chip design (glossary: <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-fidelity">the fidelity ladder</a>)</li>
+        <li><a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-04">InfSim 01: What Each Level Throws Away</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 05 — PART I ═══════════════════════════════ -->
+<section class="part" data-background-color="#1c1815">
+  <div style="max-width:860px; margin:0 auto; padding: 3em 0 0;">
+    <div style="font-family:'Geist Mono',monospace; font-size:.5em; color:var(--amber); letter-spacing:.12em; margin-bottom:.4em;">PART I</div>
+    <h1>The Levels</h1>
+    <div style="width:60px; height:3px; background:var(--amber); margin:.3em auto 1em;"></div>
+    <p class="lead">Six levels, from fields on a mesh to software on a modelled CPU. For each: what is solved, how time advances, the tools, speed and accuracy, what it is validated against, and where this GitHub goes deeper.</p>
+    <div class="ss-row" style="margin-top:1.2em; flex-wrap:wrap;">
+      <span class="ss-node active">1 Physics</span><span class="ss-arrow">→</span>
+      <span class="ss-node active">2 Circuit</span><span class="ss-arrow">→</span>
+      <span class="ss-node active">3 Logic</span><span class="ss-arrow">→</span>
+      <span class="ss-node done">4 Architecture</span><span class="ss-arrow">→</span>
+      <span class="ss-node done">5 System</span><span class="ss-arrow">→</span>
+      <span class="ss-node done">6 Software</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 06 — LEVEL 1 PHYSICS ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">04</span>
+    <h2>Level 1: Physics and Numerical Methods</h2>
+  </div>
+  <div class="cols cols-6040">
+    <div>
+      <div class="card amber">
+        <h3 class="a">What is solved</h3>
+        <p>Partial differential equations over space and time: Maxwell's equations (electromagnetics), Navier&ndash;Stokes (fluids), heat conduction, elasticity, Poisson plus drift&ndash;diffusion (semiconductors). Space is cut into a <span class="a">mesh</span>, and the equations become a large system of algebraic ones:</p>
+        <ul>
+          <li><span class="a">Finite differences (FDM)</span>: derivatives replaced by differences on a structured grid. Simple and fast; awkward on curved geometry</li>
+          <li><span class="a">Finite volumes (FVM)</span>: fluxes balanced cell by cell, so mass and energy are conserved exactly. The workhorse of CFD</li>
+          <li><span class="a">Finite elements (FEM)</span>: the solution approximated by basis functions on elements of any shape; the weak form becomes a large sparse linear system. Fits any geometry; meshes refine where the field changes fast</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">The mesh is part of the model</h3>
+        <p>A result is credible only after a <span class="g">refinement study</span>: shrink the cells until the quantity you care about stops changing, and use the trend (Richardson extrapolation) to estimate the error that remains. Mesh error, model error (the physics left out) and data error (material properties) are different things and need different checks.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Speed, accuracy, validation</h3>
+        <ul>
+          <li>3-D problems take hours to days per run; 2-D cross-sections take seconds</li>
+          <li>Accuracy is limited by geometry, material data and the mesh, rarely by arithmetic</li>
+          <li>Validated against closed-form cases, published benchmark problems, and measurement: a vector network analyser, a wind tunnel, a thermocouple</li>
+        </ul>
+      </div>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/Numerical_Methods/">Numerical Methods visualiser</a>: Euler and RK4 ODE solvers, animated step by step</li>
+          <li><a href="https://brendanjameslynskey.github.io/Differential_Equations_Explorer/">Differential Equations Explorer</a>: wave and heat equations, Green's functions</li>
+          <li><a href="https://brendanjameslynskey.github.io/Wilmott_QF_14_Numerical_Methods/#slide-02">Wilmott 14: the (S, t) grid, explicit, implicit and Crank&ndash;Nicolson</a>: a PDE solved by finite differences</li>
+          <li>Field solvers for signal integrity: next slide</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 07 — FIELD SOLVERS ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">05</span>
+    <h2>Field Solvers: FDTD, FEM and MoM</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Three ways to solve Maxwell's equations</h3>
+        <ul>
+          <li><span class="a">FDTD</span> (time domain): electric and magnetic fields on two interleaved grids (Yee, 1966), updated in a leapfrog. One pulse-excited run gives the whole frequency response. Explicit, so the step has a hard limit</li>
+          <li><span class="a">FEM</span> (usually frequency domain): one sparse solve per frequency on a tetrahedral mesh that follows any 3-D shape: packages, connectors, antennas</li>
+          <li><span class="a">MoM</span> (method of moments, integral equations): mesh only the conductor surfaces; dense matrices; suited to open radiating structures and layered (2.5-D) boards</li>
+          <li><span class="a">Quasi-static 2-D solvers</span>: a cross-section gives per-unit-length L, C, R and G for a transmission line in seconds</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Tools and sources</h3>
+        <p>Open source: <a href="https://www.openems.de/">openEMS</a>, <a href="https://meep.readthedocs.io/">Meep</a> (FDTD), <a href="https://github.com/ElmerCSC/elmerfem">Elmer</a> (FEM); commercial suites from the EDA and CAE vendors.</p>
+        <p class="src">K. S. Yee, <a href="https://doi.org/10.1109/TAP.1966.1138693">IEEE Trans. Antennas Propag., 1966</a> · R. Courant, K. Friedrichs, H. Lewy, <a href="https://doi.org/10.1007/BF01448839">Math. Annalen, 1928</a></p>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3 class="g">The CFL condition</h3>
+        <div class="eq">&Delta;t &le; &Delta;x / (c&middot;&radic;3) &nbsp;&nbsp;(3-D Yee grid, cubic cells)</div>
+        <p>An explicit scheme is stable only if a wave crosses no more than about one cell per step (Courant, Friedrichs and Lewy, 1928). Small cells force small steps: halving the cell size in 3-D multiplies the work by 16.</p>
+      </div>
+      <div class="card purple" style="margin-top:0.4em;">
+        <h3 class="p">Worked estimate (illustrative)</h3>
+        <p>0.1 mm cells in air give &Delta;t &le; 0.19 ps. Assume 10<sup>7</sup> cells and 10<sup>8</sup> cell updates per second on a multi-core CPU: each step takes 0.1 s, so one wall-clock second simulates about 1.9 &times; 10<sup>&minus;12</sup> s. A nanosecond of a connector takes about 9 minutes. Redo the arithmetic with your own assumptions.</p>
+      </div>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/Signal_Integrity/01-transmission-lines/#slide-04">Signal Integrity 01: Where Fifty Ohms Comes From</a> (interactive, from a field solve)</li>
+          <li><a href="https://brendanjameslynskey.github.io/Signal_Integrity/02-return-paths/#slide-03">Signal Integrity 02: Checking the Profile Against a Field Solve</a></li>
+          <li><a href="https://github.com/BrendanJamesLynskey/Matrix_Articles/blob/main/si_models/fdm2d.py">fdm2d.py</a>: the 2-D electrostatic solver behind the series (finite differences, red&ndash;black SOR)</li>
+          <li><a href="https://brendanjameslynskey.github.io/Companion_JOS_Physical_Audio_Signal_Processing/#ch9">Physical Audio companion, chapter 9</a>: FDTD on a vibrating membrane</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 08 — CFD TCAD MULTIPHYSICS ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">06</span>
+    <h2>CFD, TCAD and Multiphysics</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Computational fluid dynamics</h3>
+        <p>Navier&ndash;Stokes solved by finite volumes. Turbulence is usually <em>modelled</em> (Reynolds-averaged or large-eddy models) rather than resolved, which only direct numerical simulation does, at enormous cost. Engineers use it for airflow through a server, cooling of a heat sink, aerodynamics. Validated against wind-tunnel and thermal-chamber measurements. Open source: <a href="https://www.openfoam.com/">OpenFOAM</a>.</p>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Technology CAD (TCAD)</h3>
+        <p><span class="g">Process</span> simulation predicts the shapes and doping that implant, diffusion and etch steps leave behind. <span class="g">Device</span> simulation solves Poisson's equation with drift&ndash;diffusion for electrons and holes on the device's mesh, giving I&ndash;V and C&ndash;V curves. Those curves are fitted by compact models, which are what SPICE uses. Commercial suites dominate; <a href="https://devsim.org/">DEVSIM</a> is an open-source device simulator.</p>
+      </div>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/Signal_Integrity/03-materials-and-loss/#slide-09">Signal Integrity 03: What the Kramers&ndash;Kronig Test Says About Both</a>: material models that must stay causal</li>
+          <li><a href="https://brendanjameslynskey.github.io/Matrix_Methods_Network_Parameters/#slide-13">Matrix Methods: Passivity Is the Hard Part</a></li>
+          <li><a href="https://github.com/BrendanJamesLynskey/Kramers_Kronig_Relations">Kramers&ndash;Kronig Relations</a>: the causality constraint on every fitted model</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Multiphysics</h3>
+        <p>Real problems couple fields: current heats a conductor and heat raises its resistance (electro-thermal); temperature bends a package (thermo-mechanical); air carries heat away (fluid-thermal). Solvers couple either <span class="p">monolithically</span> (one large system) or by <span class="p">partitioning</span>, where each solver runs its own physics and they exchange boundary values, which is co-simulation (Part II).</p>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Where the levels hand over</h3>
+        <ul>
+          <li>TCAD &rarr; compact device model &rarr; SPICE</li>
+          <li>EM field solver &rarr; S-parameters &rarr; circuit and channel simulation</li>
+          <li>CFD &rarr; thermal boundary conditions &rarr; power and reliability models</li>
+        </ul>
+        <p style="margin-top:.2em;">Each hand-over is a reduced-order model: the level above never sees the mesh, so the reduction must keep what it needs, such as causality and passivity for S-parameters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 09 — LEVEL 2 SPICE ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">07</span>
+    <h2>Level 2: Circuits, and What SPICE Does</h2>
+  </div>
+  <div class="cols cols-6040">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Inside a SPICE transient run</h3>
+        <ul>
+          <li><span class="a">Modified nodal analysis (MNA)</span>: the unknowns are node voltages plus the currents through voltage sources and inductors. Each element <em>stamps</em> a few entries into one sparse system (Ho, Ruehli and Brennan, 1975)</li>
+          <li><span class="a">Newton&ndash;Raphson</span> for nonlinear devices: each iteration replaces every diode and transistor by its linearisation (a conductance and a current source), solves the sparse system by LU factorisation, and repeats until the voltages settle</li>
+          <li><span class="a">Implicit integration</span>: backward Euler, trapezoidal or Gear (BDF) turns each capacitor and inductor into a similar companion model for the step</li>
+          <li><span class="a">Timestep control</span>: the step is chosen from an estimate of the local truncation error, and forced to land on the corners of pulse and piecewise-linear sources (<span class="a">breakpoints</span>). If Newton fails to converge, the step is cut and retried</li>
+        </ul>
+        <div class="eq">[ G &nbsp;B ; C &nbsp;D ] &middot; [ v ; i ] = [ i<sub>s</sub> ; v<sub>s</sub> ] &nbsp;&nbsp;(the MNA system, re-solved every iteration)</div>
+      </div>
+      <p class="cap">Also: DC operating point (Newton, no time), AC small-signal (one complex solve per frequency), noise. The <a href="#/21">interactive demo</a> is a one-node transient problem, solved four ways.</p>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/DCDC_Control_Techniques/#/27">DC-DC Control Techniques: References &amp; Resources</a> (vendor SPICE models and simulators)</li>
+          <li><a href="https://github.com/BrendanJamesLynskey/Interview_Power_Supply_Design">Interview_Power_Supply_Design</a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Speed, accuracy, validation</h3>
+        <ul>
+          <li>Accuracy is set by the <span class="p">device models</span> (compact models fitted to silicon by the foundry) and by parasitics extracted from layout</li>
+          <li>Thousands of transistors: nanoseconds to microseconds of circuit time per minute (indicative). Fast-SPICE tools partition and simplify to go larger</li>
+          <li>Validated against silicon measurements and the foundry's process corners</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Tools</h3>
+        <p>Open source: <a href="https://ngspice.sourceforge.io/">ngspice</a>, <a href="https://xyce.sandia.gov/">Xyce</a>. Commercial SPICE and fast-SPICE simulators from the EDA vendors, and free vendor-supplied SPICE tools for board-level power design.</p>
+        <p class="src">L. W. Nagel, <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/1975/9602.html">SPICE2, UC Berkeley ERL M520, 1975</a> · C.-W. Ho, A. Ruehli, P. Brennan, <a href="https://doi.org/10.1109/TCS.1975.1084079">IEEE Trans. Circuits Syst., 1975</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 10 — SWITCHING + BEHAVIOURAL ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">08</span>
+    <h2>Switching and Behavioural Models</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Power converters break SPICE's budget</h3>
+        <p>A buck converter switches every microsecond or so, a load-transient study needs milliseconds, and SPICE spends its steps on the edges. Two remedies:</p>
+        <ul>
+          <li><span class="a">Piecewise-linear (PWL) switching simulators</span>, in the style of SIMPLIS: each switch and device is a few linear segments, each linear topology is solved exactly between switching events, and the simulator only has to find when the next switching event happens. It can also search for the periodic steady state directly</li>
+          <li><span class="a">Averaged models</span>: replace the switching by its average over a cycle, for loop design and stability</li>
+        </ul>
+        <p>The event-driven solver in the <a href="#/21">demo</a> uses the same idea on an RC circuit.</p>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Behavioural models</h3>
+        <ul>
+          <li><span class="g">Verilog-A / Verilog-AMS</span>: equations describing a block, simulated inside a circuit simulator</li>
+          <li><span class="g">IBIS</span>: an I/O buffer as I/V and V/t tables, so a board can be simulated without the vendor's transistor netlist</li>
+          <li><span class="g">IBIS-AMI</span>: SerDes transmit and receive equalisation as executable algorithmic models that a channel simulator calls, statistically or bit by bit, to predict eyes and bit error ratios</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card gh">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/DCDC_Control_Techniques/#/17">DC-DC Control Techniques: Interactive Load Transient Response</a> and <a href="https://brendanjameslynskey.github.io/DCDC_Control_Techniques/#/14">COT Timing</a></li>
+          <li><a href="https://github.com/BrendanJamesLynskey/COT_DCDC_Simulink">COT_DCDC_Simulink</a>: a constant on-time converter in MATLAB/Simulink</li>
+          <li><a href="https://brendanjameslynskey.github.io/SerDes_Equalisation/#slide-05">SerDes Equalisation: From S-Parameters to a Pulse Response</a> and <a href="https://brendanjameslynskey.github.io/SerDes_Equalisation/#slide-07">the whole equaliser chain</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/Matrix_Methods_Network_Parameters/#slide-18">Matrix Methods: Where This Shows Up</a> (SPICE and IBIS-AMI macromodels)</li>
+          <li><a href="https://brendanjameslynskey.github.io/Signal_Integrity/17-com-and-compliance/#slide-02">Signal Integrity 17: What Is Implemented Here, and What Is Not</a> (channel operating margin)</li>
+        </ul>
+      </div>
+      <div class="card purple" style="margin-top:0.4em;">
+        <h3 class="p">Speed, accuracy, validation</h3>
+        <ul>
+          <li>PWL: much faster than SPICE on converters (indicative), exact for its own PWL model; accuracy rests on how well the segments fit the devices</li>
+          <li>IBIS: validated against the vendor's transistor-level simulation and lab measurements</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Sources</h3>
+        <p><a href="https://ibis.org/">IBIS Open Forum</a> (IBIS and IBIS-AMI specifications) · <a href="https://www.accellera.org/downloads/standards/v-ams">Verilog-AMS (Accellera)</a> · <a href="https://www.simetrix.co.uk/">SIMetrix/SIMPLIS</a> (commercial PWL simulator; see its documentation)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 11 — LEVEL 3 LOGIC ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">09</span>
+    <h2>Level 3: Digital Logic, Event-Driven and Cycle-Based</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Event-driven</h3>
+        <p>Every signal change is an event in a <span class="a">time wheel</span>; only logic that reads a changed signal is re-evaluated. Four-state values (0, 1, X, Z), arbitrary <code>#</code> delays and any testbench construct. Updates within one time step happen in ordered zero-time iterations: <span class="a">delta cycles</span> in VHDL and SystemC (<a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-sckernel">glossary: the SystemC kernel and delta cycles</a>), the active and non-blocking-assignment regions of a SystemVerilog time slot. Icarus Verilog, GHDL and the commercial simulators work this way.</p>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Cycle-based</h3>
+        <p>Evaluate the whole design once per clock edge as compiled code. Assumes synchronous logic, usually two-state, no timing inside a cycle. <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-verilator">Verilator</a> compiles SystemVerilog into a C++ model this way; since version 5 it also accepts timing constructs (<code>--timing</code>). Fast regressions, weaker on X-propagation and testbench features.</p>
+      </div>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/SystemVerilog_Simulators/#s4">Free SystemVerilog Simulators: the support matrix</a> (Icarus, Verilator, xsim, Questa Starter, slang)</li>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_05_Verification_Bridge_cocotb/#slide-10">SimEng 05: Verilator, Icarus and CI for RTL</a></li>
+          <li><a href="https://github.com/BrendanJamesLynskey/RTL_CoSim_NTT">RTL_CoSim_NTT</a>: the design timed on the right</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Measured: the same RTL in both</h3>
+        <table class="tight">
+          <tr><th>Simulator</th><th>Style</th><th>Compile</th><th>Clock cycles per second</th></tr>
+          <tr><td>Icarus Verilog version 12.0 (stable)</td><td>event-driven, interpreted</td><td>0.03 s</td><td>6,416</td></tr>
+          <tr><td>Verilator 5.020</td><td>cycle-based, compiled C++</td><td>4.38 s</td><td>837,883</td></tr>
+        </table>
+        <p style="margin-top:.3em;">Verilator ran <span class="p">131&times;</span> more cycles per second and paid for it in compile time. Design: <code>ntt_core</code> from RTL_CoSim_NTT (50-bit words, N = 1024, 4 lanes), every output word checked against the golden NTT. Script and results: <a href="https://github.com/BrendanJamesLynskey/Introduction_to_Simulation/tree/main/demo/rtl_speed">demo/rtl_speed</a> (i7-3770).</p>
+        <p class="src">A small core: a large SoC runs orders of magnitude slower in both simulators, and the ratio varies with the design and the testbench.</p>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Speed, accuracy, validation</h3>
+        <p>RTL simulation is exact for the logic, because it <em>is</em> the design. What it needs validating against is the specification: tests, assertions, coverage, and a golden model checking every output. Large SoCs simulate at tens to thousands of cycles per second (indicative).</p>
+        <p class="src"><a href="https://steveicarus.github.io/iverilog/">Icarus Verilog</a> · <a href="https://verilator.org/guide/latest/">Verilator guide</a> · <a href="https://ghdl.github.io/ghdl/">GHDL</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 12 — GATE LEVEL, EMULATION, FPGA ═══════════════════════════════ -->
+<section data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">10</span>
+    <h2>Gate Level, Emulation and FPGA Prototypes</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Gate-level simulation</h3>
+        <p>After synthesis, the design is a netlist of library cells. <span class="a">SDF</span> (Standard Delay Format) back-annotation gives each cell and wire the delays computed by static timing analysis or extraction, and setup and hold checks fire during simulation. Used for reset and X-propagation, power-up sequences and checking timing constraints; far slower than RTL, so run sparingly. Timing sign-off itself is static timing analysis, not simulation.</p>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Hardware emulation</h3>
+        <p>RTL compiled onto special-purpose hardware (processor-based or FPGA-based emulators). Around a megahertz, with full signal visibility: fast enough to boot an operating system and run real software before silicon, at a high price per seat.</p>
+      </div>
+      <div class="card purple" style="margin-top:0.4em;">
+        <h3 class="p">FPGA prototyping</h3>
+        <p>The RTL on one or more FPGAs, partitioned when it does not fit. Tens of megahertz and real I/O, but little visibility and long compile times. Mostly for software teams and system validation.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card blue">
+        <h3 class="b">Orders of magnitude (indicative, large SoC)</h3>
+        <table class="tight">
+          <tr><th>Platform</th><th>Design clock reached</th><th>An hour of simulation covers</th></tr>
+          <tr><td>RTL simulation</td><td>10 Hz to 10 kHz</td><td>under a second of chip time</td></tr>
+          <tr><td>Gate level with SDF</td><td>slower than RTL</td><td>less than RTL does</td></tr>
+          <tr><td>Emulation</td><td>~1 MHz</td><td>an OS boot</td></tr>
+          <tr><td>FPGA prototype</td><td>10 to 100 MHz</td><td>real workloads, slowly</td></tr>
+          <tr><td>Silicon</td><td>GHz</td><td>everything, too late to change</td></tr>
+        </table>
+        <p class="src">Rules of thumb from <a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-03">InfSim 01's fidelity ladder</a>; they vary hugely with design size and modelling style.</p>
+      </div>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://github.com/BrendanJamesLynskey/RISCV_SoC">RISC-V SoC</a> and its <a href="https://github.com/BrendanJamesLynskey/RISCV_RV32IMC_5stage">5-stage RV32IMC core</a>: RTL with self-checking testbenches</li>
+          <li><a href="https://github.com/BrendanJamesLynskey/LLM_Transformer_Decoder_RTL">Transformer decoder RTL</a> and <a href="https://github.com/BrendanJamesLynskey/AI_MMUL_Unit">AI matrix-multiply units</a> (SystemVerilog plus cocotb)</li>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-06">InfSim 01: Software-Level Simulators and RTL Simulation</a></li>
+          <li><a href="https://github.com/BrendanJamesLynskey/Interview_FPGA">Interview_FPGA</a>: FPGA design and prototyping questions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 13 — LEVEL 4 ARCH I ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">11</span>
+    <h2>Level 4: Architecture, Analytical and Discrete-Event</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Analytical models</h3>
+        <p>Closed-form performance: the <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-roofline">roofline</a> (attainable throughput = the smaller of peak compute and bandwidth &times; arithmetic intensity), queueing formulas, a spreadsheet of FLOPs and bytes. Microseconds per answer, so whole design spaces can be swept; blind to contention, queueing and transients.</p>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Discrete-event simulation (DES)</h3>
+        <p>The machine as components exchanging timed events (a kernel starts, a DMA finishes, a memory request returns), and the clock jumps from one event to the next. Contention and queueing emerge rather than being assumed. Each event's duration comes from a <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-costmodel">cost model</a>. (<a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-des">Glossary: discrete-event simulation</a>.)</p>
+      </div>
+      <div class="card purple" style="margin-top:0.4em;">
+        <h3 class="p">Validated against</h3>
+        <p><a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-hwcounters">Hardware counters</a> and timings on an existing chip, RTL cycle counts for new blocks, and published results; the gap is reported as a <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-correlation">calibration and correlation</a> figure, not hidden.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card gh">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_03_LLM_Inference_Workloads/#slide-05">InfSim 03: Put a Batch on the Roofline</a> (interactive)</li>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_02_Simulator_Development_Tutorial/#slide-02">InfSim 02: A Kernel in 30 Lines</a>, then the whole tutorial</li>
+          <li><a href="https://brendanjameslynskey.github.io/FHESim_03_Simulating_an_FHE_Accelerator/#slide-05">FHESim 03: The SimPy Engine</a> and its <a href="https://brendanjameslynskey.github.io/FHESim_03_Simulating_an_FHE_Accelerator/#slide-09">live simulator</a></li>
+          <li><a href="https://github.com/BrendanJamesLynskey/FHE_Accelerator_Sim">FHE_Accelerator_Sim</a> and <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim">Disaggregated_Inference_Sim</a>: two SimPy simulators with tests and bit-exact JavaScript ports</li>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_05_Verification_Bridge_cocotb/#slide-12">SimEng 05: Feeding the RTL Back Into the Simulator</a></li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Speed</h3>
+        <p>Analytical: microseconds per design point. DES: about 10<sup>5</sup> to 10<sup>7</sup> events per second in a compiled kernel, fewer in Python (indicative; <a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-03">InfSim 01</a>). The number of events, set by the abstraction, matters more than the language: see <a href="https://brendanjameslynskey.github.io/InfSim_08_Accelerating_Simulators/#slide-03">InfSim 08: Fewer Events</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 14 — ARCH II ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">12</span>
+    <h2>Architecture: Transaction-Level and Cycle-Level</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Transaction-level modelling (SystemC TLM-2.0)</h3>
+        <p>A bus transfer is a function call that carries a payload and an annotated delay, not a sequence of pin wiggles.</p>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-ltstyle">Loosely timed (LT)</a>: each initiator runs ahead of global time by up to a <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-quantum">quantum</a> (temporal decoupling). Fast enough to boot an operating system</li>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-atstyle">Approximately timed (AT)</a>: a four-phase protocol per transfer, so contention and pipelining are modelled; slower</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Cycle-level simulation</h3>
+        <p>Pipelines, caches and queues updated every cycle, as in gem5's detailed CPU models or GPU simulators. About 10<sup>4</sup> to 10<sup>6</sup> cycles per second (indicative). More detail is not more accuracy unless it is calibrated against the real machine.</p>
+        <p class="src">N. Binkert et al., <a href="https://doi.org/10.1145/2024716.2024718">The gem5 simulator, 2011</a> · J. Lowe-Power et al., <a href="https://arxiv.org/abs/2007.03152">The gem5 Simulator: Version 20.0+, 2020</a> · A. Akram, L. Sawalha, <a href="https://doi.org/10.1109/ACCESS.2019.2917698">A Survey of Computer Architecture Simulation Techniques and Tools, 2019</a></p>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Trace-driven or execution-driven</h3>
+        <ul>
+          <li><span class="p">Trace-driven</span>: replay a recorded stream of instructions, memory accesses or kernels. Fast and repeatable, but the program cannot react when the timing changes</li>
+          <li><span class="p">Execution-driven</span>: run the program on the model, so timing-dependent behaviour (spinning on a lock, adaptive batching) is captured. Slower</li>
+          <li><span class="p">Sampling</span>: simulate representative intervals in detail and fast-forward the rest (<a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-sampling">glossary: sampling, checkpoints and mode switching</a>)</li>
+        </ul>
+      </div>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_03_SystemC_TLM_Models/#slide-10">SimEng 03: The Quantum Trade-Off</a> (interactive) and <a href="https://github.com/BrendanJamesLynskey/SystemC_Accelerator_Model">SystemC_Accelerator_Model</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_04_Memory_Systems_DRAM_HBM/#slide-01">SimEng 04: Why "Bandwidth &times; Efficiency" Fails</a> and <a href="https://github.com/BrendanJamesLynskey/Memory_System_Sim">Memory_System_Sim</a>, a command-level DRAM model</li>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_04_Simulator_Landscape/#slide-05">InfSim 04: System, Network and Micro-Architecture Simulators</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_08_Accelerating_Simulators/#slide-11">InfSim 08: Sampling, Checkpoints and Mode Switching</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 15 — LEVEL 5 SYSTEM ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">13</span>
+    <h2>Level 5: System, Network and Cloud</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">DES at system scale</h3>
+        <p>The events are now requests, batches, transfers and failures, across thousands of components and hours of traffic. Measured on this PC: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim">Disaggregated_Inference_Sim</a> (SimPy) serves 3,000 LLM requests, 770.9 s of simulated time, with 90,766 events in 0.923 s: <span class="a">835&times;</span> faster than real time, or 1,566&times; with its exact fast path. Script: <a href="https://github.com/BrendanJamesLynskey/Introduction_to_Simulation/tree/main/demo/des_speed">demo/des_speed</a>.</p>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Queueing networks</h3>
+        <p>Servers and queues with arrival and service distributions. Closed forms such as <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-little">Little's law</a> (L = &lambda;W) and the <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-queueing">M/M/1 queue</a> give instant answers for simple cases, and double as unit tests for a simulator: a correct DES must reproduce them.</p>
+      </div>
+      <div class="card purple" style="margin-top:0.4em;">
+        <h3 class="p">Network simulators and agent-based models</h3>
+        <p><span class="p">Packet-level</span> simulators (<a href="https://www.nsnam.org/">ns-3</a>, <a href="https://omnetpp.org/">OMNeT++</a>) model protocols and topologies packet by packet; flow-level models trade packet detail for speed. <span class="p">Agent-based</span> models give many autonomous agents simple local rules (people, vehicles, traders) and let the aggregate behaviour emerge.</p>
+        <p class="src">G. F. Riley, T. R. Henderson, <a href="https://doi.org/10.1007/978-3-642-12331-3_2">The ns-3 Network Simulator, 2010</a> · C. M. Macal, M. J. North, <a href="https://doi.org/10.1057/jos.2010.3">Tutorial on agent-based modelling and simulation, 2010</a></p>
+      </div>
+    </div>
+    <div>
+      <div class="card gh">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_05_Disaggregated_Inference/#slide-06">InfSim 05: Run the Simulator</a> (the same model, in the browser)</li>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_02_Simulator_Development_Tutorial/#slide-03">InfSim 02: A Queue, Checked Against Theory</a></li>
+          <li><a href="https://github.com/BrendanJamesLynskey/Rust_DES_Kernel">Rust_DES_Kernel</a>: a bit-exact Rust port of the serving simulator</li>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_04_Simulator_Landscape/#slide-02">InfSim 04: Serving-Level Simulators</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/Markov_Chain_Visualisation/">Markov Chain Visualisation</a>: a stochastic model simulated step by step</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Speed, accuracy, validation</h3>
+        <ul>
+          <li>Speed depends on events per simulated second: macro-stepping and coarser events buy orders of magnitude</li>
+          <li>Accuracy rests on the workload model (arrival process, request mix) at least as much as on the component models</li>
+          <li>Validated against production traces and against the queueing closed forms above</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 16 — MONTE CARLO ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">14</span>
+    <h2>Monte Carlo and Variance Reduction</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">The method</h3>
+        <p>Estimate an expectation by averaging random samples of the model. The standard error falls only as the square root of the number of samples, so each extra decimal digit costs a hundred times more runs.</p>
+        <div class="eq">standard error = &sigma; / &radic;N</div>
+        <p>Engineering uses: manufacturing yield under process variation (Monte Carlo SPICE), reliability and failure rates, risk and option prices, and the randomness inside every stochastic DES.</p>
+        <p class="src">N. Metropolis, S. Ulam, <a href="https://doi.org/10.1080/01621459.1949.10483310">The Monte Carlo Method, JASA, 1949</a></p>
+      </div>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/Wilmott_QF_14_Numerical_Methods/#slide-06">Wilmott 14: Monte Carlo Simulation</a>, <a href="https://brendanjameslynskey.github.io/Wilmott_QF_14_Numerical_Methods/#slide-07">antithetic and control variates</a>, <a href="https://brendanjameslynskey.github.io/Wilmott_QF_14_Numerical_Methods/#slide-09">low-discrepancy sequences</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/Wilmott_QF_09_Exotic_Options/#slide-10">Wilmott 09: barrier-option Monte Carlo</a> (interactive)</li>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_06_Metrics_Hotspots_Validation/#slide-07">InfSim 06: Replications, Confidence Intervals and Common Random Numbers</a> (interactive)</li>
+          <li><a href="https://github.com/BrendanJamesLynskey/Random_Walk_Visualisation">Random Walk Visualisation</a> and <a href="https://github.com/BrendanJamesLynskey/Central_Limit_Theorem">Central Limit Theorem</a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3 class="g">Variance reduction: shrink <span style="text-transform:none">&sigma;</span>, not just grow N</h3>
+        <ul>
+          <li><span class="g">Antithetic variates</span>: pair each random draw with its mirror image, so their errors partly cancel</li>
+          <li><span class="g">Control variates</span>: subtract a correlated quantity whose mean is known exactly</li>
+          <li><span class="g"><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-crn">Common random numbers</a></span>: compare two designs on the same random stream, so the difference is not swamped by noise</li>
+          <li><span class="g">Importance sampling</span>: draw more samples from the rare region that matters and reweight them. Essential for bit error ratios of 10<sup>&minus;12</sup> or for failure probabilities</li>
+          <li><span class="g">Quasi-Monte Carlo</span>: low-discrepancy points (Sobol, Halton) fill the space more evenly than random ones</li>
+        </ul>
+      </div>
+      <div class="card purple" style="margin-top:0.4em;">
+        <h3 class="p">Reporting it</h3>
+        <p>A Monte Carlo answer is an estimate with an error bar: report the <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-warmup">confidence interval</a> and the number of samples, and check that it shrinks as expected when N grows.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 17 — LEVEL 6 VIRTUAL PLATFORMS ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">15</span>
+    <h2>Level 6: Software Virtual Platforms</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Instruction-set simulators (ISS)</h3>
+        <p>Fetch, decode and execute one instruction at a time against modelled registers and memory. Simple, and exact at the level of the instruction set. <a href="https://github.com/riscv-software-src/riscv-isa-sim">Spike</a>, the RISC-V reference ISS, is used as the golden model when verifying processor RTL.</p>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Dynamic binary translation: QEMU</h3>
+        <p>QEMU's code generator (<a href="https://www.qemu.org/docs/master/devel/tcg.html">TCG</a>) translates each block of guest instructions into host code once and caches it. In the original paper, user-mode emulation was about 4&times; slower than native on integer code and 10&times; on floating point, with a further factor of 2 for the software MMU in full-system mode (QEMU 0.4.2; today's figures depend on the guest, host and workload).</p>
+        <p class="src">F. Bellard, <a href="https://www.usenix.org/legacy/event/usenix05/tech/freenix/full_papers/bellard/bellard.pdf">QEMU, a Fast and Portable Dynamic Translator, USENIX 2005</a></p>
+      </div>
+      <div class="card purple" style="margin-top:0.4em;">
+        <h3 class="p">Virtual prototypes</h3>
+        <p>A whole platform (CPUs, bus, memory map, peripherals) as fast functional models, often SystemC TLM loosely timed, so firmware, drivers and operating systems run before silicon. Register-accurate, not cycle-accurate: right for software bring-up, wrong for performance. Open source: <a href="https://renode.io/">Renode</a>; CPU vendors and EDA vendors sell their own.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card gh">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/RISC_V/#/21">RISC-V: Mini RISC-V Stepper</a>, an instruction-set simulator in the browser, running Fibonacci</li>
+          <li><a href="https://github.com/BrendanJamesLynskey/Interview_RISC_V/blob/main/05_ecosystem/simulation_spike_qemu.md">Interview_RISC_V: simulation with Spike and QEMU</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-02">InfSim 01: Four Jobs a Simulator Does</a> (software bring-up is one)</li>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_03_SystemC_TLM_Models/#slide-07">SimEng 03: Loosely Timed, Temporal Decoupling and the Quantum</a></li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Speed, accuracy, validation</h3>
+        <ul>
+          <li>Interpretive ISS: tens of millions of instructions per second at most; translated (QEMU) and LT platforms: hundreds of millions to billions (indicative)</li>
+          <li>Functionally exact if the models are right; no timing to speak of</li>
+          <li>Validated by running the same software on the platform and on silicon or an FPGA, and by architecture compliance test suites</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 18 — ONE ACCELERATOR, EVERY LEVEL ═══════════════════════════════ -->
+<section data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">16</span>
+    <h2>One Accelerator, Every Level</h2>
+  </div>
+  <p>The FHE accelerator work on this GitHub models one design at five levels, and each level checks or feeds another. It is a compact example of how the levels work together on a real project.</p>
+  <table class="tight">
+    <tr><th>Level</th><th>Model</th><th>What it answers</th><th>Explained in</th></tr>
+    <tr><td>Analytical</td><td>Roofline and the NTT-, MAC-, memory- and power-bound tests</td><td>Which resource limits bootstrapping?</td><td><a href="https://brendanjameslynskey.github.io/FHESim_05_Results_and_Design_Space/#slide-03">FHESim 05: NTT-Bound Against Memory-Bound</a></td></tr>
+    <tr><td>Discrete-event</td><td><a href="https://github.com/BrendanJamesLynskey/FHE_Accelerator_Sim">FHE_Accelerator_Sim</a> (SimPy, bit-exact JS port)</td><td>Latency, energy and hot-spots for a trace</td><td><a href="https://brendanjameslynskey.github.io/FHESim_03_Simulating_an_FHE_Accelerator/#slide-05">FHESim 03: The SimPy Engine</a></td></tr>
+    <tr><td>Memory system</td><td><a href="https://github.com/BrendanJamesLynskey/Memory_System_Sim">Memory_System_Sim</a> (command-level DRAM/HBM)</td><td>Replaces "bandwidth &times; efficiency"</td><td><a href="https://brendanjameslynskey.github.io/SimEng_04_Memory_Systems_DRAM_HBM/#slide-12">SimEng 04: Plugging It Into the FHE Simulator</a></td></tr>
+    <tr><td>Transaction-level</td><td><a href="https://github.com/BrendanJamesLynskey/SystemC_Accelerator_Model">SystemC_Accelerator_Model</a> (TLM-2.0, AT and LT)</td><td>Does a C++ model agree op by op?</td><td><a href="https://brendanjameslynskey.github.io/SimEng_03_SystemC_TLM_Models/#slide-09">SimEng 03: Checked Against the SimPy Model</a></td></tr>
+    <tr><td>RTL</td><td><a href="https://github.com/BrendanJamesLynskey/RTL_CoSim_NTT">RTL_CoSim_NTT</a> (cocotb on <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-verilator">Verilator</a>)</td><td>Real NTT cycle counts</td><td><a href="https://brendanjameslynskey.github.io/SimEng_05_Verification_Bridge_cocotb/#slide-12">SimEng 05: Feeding the RTL Back Into the Simulator</a></td></tr>
+    <tr><td>Area and cost</td><td>The calibrated area, yield and cost model</td><td>Is a design worth its silicon?</td><td><a href="https://brendanjameslynskey.github.io/SimEng_13_PPA_Tradeoffs/#slide-09">SimEng 13: PPA Explorer</a> (<a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-ppa">glossary: PPA</a>)</td></tr>
+  </table>
+  <div class="cols cols-2" style="margin-top:.4em;">
+    <div class="card amber">
+      <h3 class="a">The flows between levels</h3>
+      <ul>
+        <li>RTL cycle counts calibrate the NTT throughput the DES assumes</li>
+        <li>The DES's traces drive the SystemC model, which must agree with it</li>
+        <li>The DRAM model replaces a fixed efficiency factor with scheduled commands</li>
+      </ul>
+    </div>
+    <div class="card blue">
+      <h3 class="b">A second thread: one SerDes link</h3>
+      <p>Field solver (<a href="https://brendanjameslynskey.github.io/Signal_Integrity/">Signal Integrity 01&ndash;04</a>) &rarr; S-parameters (<a href="https://brendanjameslynskey.github.io/Matrix_Methods_Network_Parameters/">Matrix Methods</a>) &rarr; pulse response and equalisers (<a href="https://brendanjameslynskey.github.io/SerDes_Equalisation/">SerDes Equalisation</a>) &rarr; a compliance verdict (<a href="https://brendanjameslynskey.github.io/Signal_Integrity/17-com-and-compliance/">Signal Integrity 17</a>).</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 19 — PART II ═══════════════════════════════ -->
+<section class="part" data-background-color="#1c1815">
+  <div style="max-width:860px; margin:0 auto; padding: 3em 0 0;">
+    <div style="font-family:'Geist Mono',monospace; font-size:.5em; color:var(--green); letter-spacing:.12em; margin-bottom:.4em;">PART II</div>
+    <h1>Cross-Cutting Methods</h1>
+    <div style="width:60px; height:3px; background:var(--green); margin:.3em auto 1em;"></div>
+    <p class="lead">The questions every level shares: how time advances, how the step is chosen, how randomness is handled, how simulators are joined together, how a model earns trust, and how to choose a level in the first place.</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 20 — TIME-STEPPING VS EVENT-DRIVEN ═══════════════════════════════ -->
+<section data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">17</span>
+    <h2>Time-Stepping and Event-Driven</h2>
+  </div>
+  <svg class="diagram" viewBox="0 0 1040 250" width="100%" role="img" aria-label="Three timelines: fixed time steps, adaptive time steps crowding at an input edge, and irregular events popped from a priority queue">
+    <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#988d82"/></marker></defs>
+    <text x="10" y="34" fill="#dcad61" font-size="15" font-weight="700">Fixed steps</text>
+    <line x1="210" y1="30" x2="1020" y2="30" stroke="#403831" stroke-width="2"/>
+    <g stroke="#dcad61" stroke-width="2">
+      <line x1="210" y1="20" x2="210" y2="40"/><line x1="260" y1="20" x2="260" y2="40"/><line x1="310" y1="20" x2="310" y2="40"/><line x1="360" y1="20" x2="360" y2="40"/><line x1="410" y1="20" x2="410" y2="40"/><line x1="460" y1="20" x2="460" y2="40"/><line x1="510" y1="20" x2="510" y2="40"/><line x1="560" y1="20" x2="560" y2="40"/><line x1="610" y1="20" x2="610" y2="40"/><line x1="660" y1="20" x2="660" y2="40"/><line x1="710" y1="20" x2="710" y2="40"/><line x1="760" y1="20" x2="760" y2="40"/><line x1="810" y1="20" x2="810" y2="40"/><line x1="860" y1="20" x2="860" y2="40"/><line x1="910" y1="20" x2="910" y2="40"/><line x1="960" y1="20" x2="960" y2="40"/><line x1="1010" y1="20" x2="1010" y2="40"/>
+    </g>
+    <text x="10" y="54" fill="#988d82" font-size="12">same h everywhere; stability caps h</text>
+    <text x="10" y="114" fill="#a9cd8e" font-size="15" font-weight="700">Adaptive steps</text>
+    <line x1="210" y1="110" x2="1020" y2="110" stroke="#403831" stroke-width="2"/>
+    <path d="M210,128 L480,128 L480,94 L760,94 L760,128 L1020,128" stroke="#988d82" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
+    <g stroke="#a9cd8e" stroke-width="2">
+      <line x1="210" y1="100" x2="210" y2="120"/><line x1="330" y1="100" x2="330" y2="120"/><line x1="420" y1="100" x2="420" y2="120"/><line x1="460" y1="100" x2="460" y2="120"/><line x1="474" y1="100" x2="474" y2="120"/><line x1="480" y1="100" x2="480" y2="120"/><line x1="486" y1="100" x2="486" y2="120"/><line x1="498" y1="100" x2="498" y2="120"/><line x1="525" y1="100" x2="525" y2="120"/><line x1="580" y1="100" x2="580" y2="120"/><line x1="680" y1="100" x2="680" y2="120"/><line x1="740" y1="100" x2="740" y2="120"/><line x1="754" y1="100" x2="754" y2="120"/><line x1="760" y1="100" x2="760" y2="120"/><line x1="767" y1="100" x2="767" y2="120"/><line x1="784" y1="100" x2="784" y2="120"/><line x1="830" y1="100" x2="830" y2="120"/><line x1="930" y1="100" x2="930" y2="120"/>
+    </g>
+    <text x="10" y="134" fill="#988d82" font-size="12">small steps at the input edges</text>
+    <text x="10" y="194" fill="#ba9ecc" font-size="15" font-weight="700">Event-driven</text>
+    <line x1="210" y1="190" x2="1020" y2="190" stroke="#403831" stroke-width="2"/>
+    <g fill="#ba9ecc">
+      <circle cx="245" cy="190" r="7"/><circle cx="268" cy="190" r="7"/><circle cx="430" cy="190" r="7"/><circle cx="612" cy="190" r="7"/><circle cx="640" cy="190" r="7"/><circle cx="905" cy="190" r="7"/>
+    </g>
+    <text x="10" y="214" fill="#988d82" font-size="12">nothing computed between events</text>
+    <rect x="600" y="206" width="430" height="36" rx="6" fill="#231e1a" stroke="#ba9ecc"/>
+    <text x="614" y="229" fill="#ede5d9" font-size="13">event queue: next (t=905, arrival), then (t=1210, done) …</text>
+    <path d="M870,206 L898,198" stroke="#988d82" stroke-width="1.3" fill="none" marker-end="url(#arr)"/>
+  </svg>
+  <div class="cols cols-3" style="margin-top:.3em;">
+    <div class="card amber">
+      <h3 class="a">Time-stepping</h3>
+      <p>For continuous state (voltages, fields, temperatures): advance by a step h and evaluate the derivatives. Fixed steps are simple and suit real-time use; adaptive steps follow the dynamics and save work where little happens.</p>
+    </div>
+    <div class="card purple">
+      <h3 class="p">Event-driven</h3>
+      <p>For state that changes only at instants (a packet arrives, a signal toggles): keep a priority queue of future events, pop the earliest, run its handler, which may schedule more. Simultaneous events need a <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-tiebreak">deterministic tie-break</a>. (<a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-des">Glossary: DES</a>.)</p>
+    </div>
+    <div class="card green">
+      <h3 class="g">Hybrid</h3>
+      <p>Continuous dynamics with discrete events (a switch opens, a thermostat fires): integrate, detect the zero crossing, locate it, then restart from it. SPICE breakpoints, switching simulators and FMI's event mode all do this.</p>
+    </div>
+  </div>
+  <div class="card gh" style="margin-top:.4em;">
+    <h3>On this GitHub</h3>
+    <ul>
+      <li><a href="https://brendanjameslynskey.github.io/InfSim_02_Simulator_Development_Tutorial/#slide-04">InfSim 02: Step Through the Event List</a> (interactive) · <a href="https://brendanjameslynskey.github.io/SimEng_01_Rust_for_Simulation_Engineers/#slide-02">SimEng 01: The Event List: BinaryHeap and Reverse</a> · <a href="https://brendanjameslynskey.github.io/SimEng_01_Rust_for_Simulation_Engineers/#slide-04">SimEng 01: The Event Queue's Ordering Rule</a> (interactive)</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 21 — STIFFNESS ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">18</span>
+    <h2>Stiffness, Stability and Step Control</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Explicit and implicit</h3>
+        <ul>
+          <li><span class="a">Forward Euler</span> (explicit): v<sub>n+1</sub> = v<sub>n</sub> + h&middot;f(t<sub>n</sub>, v<sub>n</sub>). Cheap per step, but on dv/dt = &minus;v/&tau; each step multiplies the error by (1 &minus; h/&tau;)</li>
+          <li><span class="a">Backward Euler, trapezoidal, BDF</span> (implicit): f evaluated at the new point, so each step needs a solve (Newton, for a nonlinear circuit), but decaying modes stay stable for any h</li>
+        </ul>
+        <div class="eq">|1 &minus; h/&tau;| &lt; 1 &nbsp;&hArr;&nbsp; 0 &lt; h &lt; 2&tau; &nbsp;&nbsp;(forward Euler on dv/dt = &minus;v/&tau;)</div>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Stiffness</h3>
+        <p>A system is stiff when it mixes very different time constants: picosecond parasitics with millisecond thermal drift, fast and slow chemistry. An explicit method's step is capped by the <em>fastest</em> mode even after that mode has died away; an implicit one can let the step follow the slow behaviour you care about. That is why SPICE integrates implicitly.</p>
+      </div>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/Numerical_Methods/">Numerical Methods visualiser</a>: Euler against RK4, step by step</li>
+          <li><a href="https://brendanjameslynskey.github.io/Wilmott_QF_14_Numerical_Methods/#slide-04">Wilmott 14: Explicit FD for the Black&ndash;Scholes PDE</a>, where the explicit scheme's stability limit appears again</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Error control</h3>
+        <p><span class="p">Embedded pairs</span> such as Dormand&ndash;Prince 5(4) compute two solutions of different order from the same stages; their difference estimates the local error, and the step grows or shrinks to keep it under a tolerance. The estimate assumes the solution is smooth. At a discontinuity (a square-wave edge, a switch closing) the solver rejects step after step until it has pinned the edge down, unless it is told where the edges are: <span class="p">breakpoints</span>.</p>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Try it next</h3>
+        <p>On the RC circuit of the next slide, forward Euler at h = 2.2&tau; ends 25.8 V off a 1 V signal; backward Euler at the same step stays within 0.708 V. Adaptive Dormand&ndash;Prince at a tolerance of 10<sup>&minus;6</sup> needs 2,660 evaluations and rejects 218 steps; told where the edges are, it needs 560 and its error falls from 2.4 &times; 10<sup>&minus;4</sup> V to 2.5 &times; 10<sup>&minus;7</sup> V.</p>
+        <p class="src">J. R. Dormand, P. J. Prince, <a href="https://doi.org/10.1016/0771-050X(80)90013-3">A family of embedded Runge&ndash;Kutta formulae, 1980</a> · E. Hairer, G. Wanner, <a href="https://doi.org/10.1007/978-3-642-05221-7">Solving Ordinary Differential Equations II: Stiff and Differential-Algebraic Problems</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 22 — INTERACTIVE ═══════════════════════════════ -->
+<section data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">19</span>
+    <h2>Interactive: One Circuit, Four Solvers</h2>
+  </div>
+  <p style="font-size:.46em; margin:0 0 .2em;">An RC low-pass filter (&tau; = RC = 1 ms) driven by a 0&ndash;1 V square wave of period 4&tau;, simulated for 20&tau; (10 edges). Error is the largest |v &minus; v<sub>exact</sub>| at the solver's own time points. Every row is reproduced by <a href="https://github.com/BrendanJamesLynskey/Introduction_to_Simulation/blob/main/demo/rc_solvers.py">demo/rc_solvers.py</a>.</p>
+  <div class="demo-ctl">
+    <span><label for="rc-method">Plot</label>
+      <select id="rc-method">
+        <option value="fe">Forward Euler</option>
+        <option value="be">Backward Euler</option>
+        <option value="rk45">Dormand&ndash;Prince 5(4)</option>
+        <option value="rk45bp" selected>Dormand&ndash;Prince, edges as breakpoints</option>
+        <option value="event">Event-driven (exact)</option>
+      </select></span>
+    <span><label for="rc-h">Fixed step h</label> <input type="range" id="rc-h" min="0" max="10" step="1" value="4"> <output id="rc-h-out"></output></span>
+    <span><label for="rc-tol">Tolerance</label> <input type="range" id="rc-tol" min="2" max="8" step="1" value="6"> <output id="rc-tol-out"></output></span>
+  </div>
+  <svg id="rc-plot" viewBox="0 0 1000 300" role="img" aria-label="Capacitor voltage against time: the exact solution and the selected solver's points"></svg>
+  <table class="tight" id="rc-table" style="margin-top:.3em;">
+    <thead><tr><th>Method</th><th>Setting</th><th>Accepted steps</th><th>Rejected</th><th>Right-hand-side evaluations</th><th>Max error (V)</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <p class="cap" style="font-size:.4em; color:var(--muted); margin-top:.3em;">Try: forward Euler at h = 2.2&tau; (unstable) against backward Euler at the same step (stable, but smeared); Dormand&ndash;Prince with and without breakpoints at the same tolerance; the event-driven solver, exact to rounding in 10 events, because the input is constant between edges, as in a piecewise-linear switching simulator.</p>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 23 — STOCHASTIC ═══════════════════════════════ -->
+<section data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">20</span>
+    <h2>Deterministic and Stochastic</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Deterministic models still need reproducibility</h3>
+        <p>Same inputs, same outputs, on every run and every machine. That takes deliberate work: a fixed rule for simultaneous events, ordered floating-point reductions, no dependence on hash order or thread timing (<a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-determinism">glossary: determinism, tie-breaking and RNG streams</a>). Ports to another language can even be <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-bitexact">bit-exact</a>.</p>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Stochastic models</h3>
+        <ul>
+          <li>Random arrivals, request sizes, failures, process variation</li>
+          <li>Seed every random stream explicitly and record the seed; give each source its own stream, so changing one does not shift the others</li>
+          <li>One run is one sample. Run independent <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-warmup">replications</a>, discard the warm-up transient, and report a mean with a confidence interval; within one long run, use <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-batchmeans">batch means</a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card red">
+        <h3 class="r">Pitfalls</h3>
+        <ul>
+          <li>Reporting a single run as the answer</li>
+          <li>Confidence intervals computed from correlated observations, such as consecutive request latencies</li>
+          <li>Comparing two designs on different random streams, so noise swamps the difference (use <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-crn">common random numbers</a>)</li>
+          <li>Tail percentiles: a p99 needs far more samples than a mean</li>
+        </ul>
+      </div>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_06_Metrics_Hotspots_Validation/#slide-06">InfSim 06: Statistics That Survive Review</a> and <a href="https://brendanjameslynskey.github.io/InfSim_06_Metrics_Hotspots_Validation/#slide-07">its interactive</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_12_Measurement_Tools_and_Methods/#slide-14">SimEng 12: Statistics of Simulation Output</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_02_Simulator_Development_Tutorial/#slide-10">InfSim 02: Time, Ordering and Determinism Pitfalls</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_02_Rust_Python_PyO3/#slide-07">SimEng 02: Reproducing Python's Random Numbers</a> in Rust</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 24 — CO-SIMULATION ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">21</span>
+    <h2>Co-Simulation and Hardware-in-the-Loop</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Co-simulation and FMI</h3>
+        <p>Two or more simulators, each with its own solver, exchange values at agreed communication points. The <a href="https://fmi-standard.org/">Functional Mock-up Interface (FMI)</a> packages a model as an FMU: an XML description plus C code or binaries. In <span class="a">model exchange</span> the host integrates the FMU's equations; in <span class="a">co-simulation</span> the FMU brings its own solver, and a master algorithm steps every FMU and passes signals between them at each macro step. The step size trades accuracy and stability against speed.</p>
+        <p class="src">T. Blochwitz et al., <a href="https://doi.org/10.3384/ecp11063105">The Functional Mockup Interface for Tool independent Exchange of Simulation Models, Modelica 2011</a></p>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Mixed-signal and HW/SW</h3>
+        <ul>
+          <li><span class="g">Mixed-signal</span>: a time-stepping analogue solver and an event-driven digital kernel, synchronised at the boundary signals; real-number models of the analogue blocks speed it up</li>
+          <li><span class="g">Hardware and software</span>: Python drives RTL through <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-cocotb">cocotb</a> while a <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-goldenmodel">golden model</a> checks outputs; or compiled RTL sits inside a C++ or SystemC platform (<a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-cosim">glossary: co-simulation</a>)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Hardware-in-the-loop (HIL)</h3>
+        <p>The controller under test is real hardware (an engine control unit, a motor drive's controller board), wired to a <span class="p">real-time</span> simulation of the plant it controls. The simulator must finish every step before its deadline, so plant models are simplified until they do. The cheaper stages come first: model-in-the-loop, software-in-the-loop (the controller code on a PC), processor-in-the-loop (on the target processor).</p>
+      </div>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_05_Verification_Bridge_cocotb/#slide-03">SimEng 05: cocotb in One Page</a> and <a href="https://brendanjameslynskey.github.io/SimEng_05_Verification_Bridge_cocotb/#slide-04">Two Golden Models and a Scoreboard</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-08">InfSim 01: Co-Simulation in Practice</a></li>
+          <li><a href="https://github.com/BrendanJamesLynskey/RTL_CoSim_NTT">RTL_CoSim_NTT</a>: Python golden model against RTL</li>
+          <li><a href="https://brendanjameslynskey.github.io/Control_Theory/">Control Theory explorer</a>: a controller and plant simulated in a loop</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 25 — DIGITAL TWINS ═══════════════════════════════ -->
+<section data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">22</span>
+    <h2>Digital Twins, Defined Carefully</h2>
+  </div>
+  <div class="card amber">
+    <h3 class="a">A definition worth using</h3>
+    <p>"A digital twin is a set of virtual information constructs that mimics the structure, context, and behavior of a natural, engineered, or social system (or system-of-systems), is dynamically updated with data from its physical twin, has a predictive capability, and informs decisions that realize value. The bidirectional interaction between the virtual and the physical is central to the digital twin."</p>
+    <p class="src">US National Academies, <a href="https://doi.org/10.17226/26894">Foundational Research Gaps and Future Directions for Digital Twins</a> (2024), adapting a 2020 AIAA definition</p>
+  </div>
+  <div class="cols cols-2" style="margin-top:.4em;">
+    <div class="card green">
+      <h3 class="g">Model, monitor or twin?</h3>
+      <table class="tight">
+        <tr><th>What you have</th><th>Live data</th><th>Predicts</th><th>Feeds decisions back</th><th>Call it</th></tr>
+        <tr><td>A CAD or simulation model</td><td>no</td><td>yes</td><td>no</td><td>a model</td></tr>
+        <tr><td>A dashboard of sensor data</td><td>yes</td><td>no</td><td>maybe</td><td>monitoring</td></tr>
+        <tr><td>A model kept in step with live data</td><td>yes</td><td>yes</td><td>no</td><td>sometimes a "digital shadow"</td></tr>
+        <tr><td>All of these, with decisions acted on</td><td>yes</td><td>yes</td><td>yes</td><td>a digital twin</td></tr>
+      </table>
+    </div>
+    <div class="card purple">
+      <h3 class="p">What a real twin needs</h3>
+      <ul>
+        <li>A model fast enough to keep up with the asset: usually a reduced-order model from the levels in Part I</li>
+        <li>Continual calibration from data (data assimilation), with its uncertainty quantified</li>
+        <li>Verification and validation of the whole loop, not just the model</li>
+      </ul>
+      <p style="margin-top:.2em;">The term is used loosely in marketing: ask which of the four properties actually hold. Nothing on this GitHub is a twin in this strict sense; the nearest ingredient is calibration, such as <a href="https://brendanjameslynskey.github.io/FHE_Hub_Accelerator_Simulators/#g-calibration">calibrating a simulator against OpenFHE</a>.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 26 — V&V ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">23</span>
+    <h2>Verification, Validation and Calibration</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Three different questions</h3>
+        <ul>
+          <li><span class="a">Verification</span>: did we build the model right? The code matches the intended model: unit tests, analytic cases, convergence studies, <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-differential">differential testing</a> against an independent implementation</li>
+          <li><span class="a">Validation</span>: did we build the right model? Its output matches the real system to the accuracy the decision needs, over the range of conditions it will be used for</li>
+          <li><span class="a">Calibration</span>: tuning parameters until the model matches data. Calibrate on one data set and validate on another, or the validation proves nothing</li>
+        </ul>
+        <p class="src">R. G. Sargent, <a href="https://doi.org/10.1057/jos.2012.20">Verification and validation of simulation models, J. Simulation, 2013</a></p>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Model credibility</h3>
+        <ul>
+          <li>State the intended use and the domain the model covers</li>
+          <li>Document assumptions and what each level leaves out</li>
+          <li>Report validation results with the conditions they cover, and their uncertainty</li>
+          <li>Keep <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-golden">golden runs</a> in CI, so a change that moves an answer is noticed</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">A ladder of evidence</h3>
+        <ol style="padding-left:1.2em;">
+          <li>Closed-form cases the model must reproduce</li>
+          <li>Convergence as the mesh or step is refined</li>
+          <li>Agreement with another simulator</li>
+          <li>Agreement with measurement, out of sample</li>
+        </ol>
+        <p style="margin-top:.2em;">(<a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-ladder">Glossary: the verification ladder</a>.)</p>
+      </div>
+      <div class="card gh" style="margin-top:0.4em;">
+        <h3>On this GitHub</h3>
+        <ul>
+          <li><a href="https://brendanjameslynskey.github.io/InfSim_06_Metrics_Hotspots_Validation/#slide-08">InfSim 06: The Verification Ladder</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_09_Specs_Requirements_Test_Plans/#slide-07">SimEng 09: The V-Model</a> (<a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-vmodel">glossary</a>)</li>
+          <li><a href="https://brendanjameslynskey.github.io/SimEng_12_Measurement_Tools_and_Methods/#slide-15">SimEng 12: Agreement as a Measurement</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/FHESim_02_Anatomy_of_Bootstrapping/#slide-12">FHESim 02: Checked Against a Real OpenFHE Bootstrap</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/Signal_Integrity/16-measurement-and-correlation/#slide-09">Signal Integrity 16: What Correlation Honestly Means</a></li>
+          <li><a href="https://brendanjameslynskey.github.io/Signal_Integrity/01-transmission-lines/#slide-11">Signal Integrity 01: Checking the Model Against a Published Example</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 27 — SPEED ACCURACY EFFORT ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">24</span>
+    <h2>Speed, Accuracy and Effort</h2>
+  </div>
+<svg class="diagram" viewBox="0 0 1060 456" width="100%" role="img" aria-label="Simulated seconds per wall-clock second for each level of simulation, on a log scale">
+<line x1="250.0" y1="28" x2="250.0" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="250.0" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">-14</tspan></text>
+<line x1="315.8" y1="28" x2="315.8" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="315.8" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">-12</tspan></text>
+<line x1="381.7" y1="28" x2="381.7" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="381.7" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">-10</tspan></text>
+<line x1="447.5" y1="28" x2="447.5" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="447.5" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">-8</tspan></text>
+<line x1="513.3" y1="28" x2="513.3" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="513.3" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">-6</tspan></text>
+<line x1="579.2" y1="28" x2="579.2" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="579.2" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">-4</tspan></text>
+<line x1="645.0" y1="28" x2="645.0" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="645.0" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">-2</tspan></text>
+<line x1="710.8" y1="28" x2="710.8" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="710.8" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">0</tspan></text>
+<line x1="776.7" y1="28" x2="776.7" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="776.7" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">2</tspan></text>
+<line x1="842.5" y1="28" x2="842.5" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="842.5" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">4</tspan></text>
+<line x1="908.3" y1="28" x2="908.3" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="908.3" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">6</tspan></text>
+<line x1="974.2" y1="28" x2="974.2" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="974.2" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">8</tspan></text>
+<line x1="1040.0" y1="28" x2="1040.0" y2="368" stroke="#403831" stroke-width="1"/>
+<text x="1040.0" y="386" text-anchor="middle" fill="#988d82" font-size="13">10<tspan dy="-6" font-size="10">10</tspan></text>
+<line x1="710.8" y1="24" x2="710.8" y2="368" stroke="#ede5d9" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="716.8" y="20" fill="#ede5d9" font-size="12">real time</text>
+<text x="645" y="406" text-anchor="middle" fill="#988d82" font-size="13">simulated seconds per wall-clock second (log scale; cycle counts converted at a 1 GHz clock)</text>
+<text x="8" y="20" fill="#988d82" font-size="12">most physical detail at the top</text>
+<text x="8" y="53" fill="#ede5d9" font-size="14">3-D full-wave EM (FDTD)</text>
+<text x="240" y="53" text-anchor="end" fill="#988d82" font-size="12">L1</text>
+<rect x="292.3" y="40" width="65.8" height="17" rx="4" fill="#ba9ecc" fill-opacity="0.28" stroke="#ba9ecc" stroke-dasharray="4 3"/>
+<text x="8" y="83" fill="#ede5d9" font-size="14">SPICE, transistor level</text>
+<text x="240" y="83" text-anchor="end" fill="#988d82" font-size="12">L2</text>
+<rect x="381.7" y="70" width="131.7" height="17" rx="4" fill="#dcad61" fill-opacity="0.28" stroke="#dcad61" stroke-dasharray="4 3"/>
+<text x="8" y="113" fill="#ede5d9" font-size="14">Gate level + SDF timing</text>
+<text x="240" y="113" text-anchor="end" fill="#988d82" font-size="12">L3</text>
+<rect x="381.7" y="100" width="98.8" height="17" rx="4" fill="#dcad61" fill-opacity="0.28" stroke="#dcad61" stroke-dasharray="4 3"/>
+<text x="8" y="143" fill="#ede5d9" font-size="14">RTL simulation</text>
+<text x="240" y="143" text-anchor="end" fill="#988d82" font-size="12">L3</text>
+<rect x="447.5" y="130" width="98.8" height="17" rx="4" fill="#dcad61" fill-opacity="0.28" stroke="#dcad61" stroke-dasharray="4 3"/>
+<circle cx="539.9" cy="138.5" r="6" fill="#a9cd8e" stroke="#1c1815" stroke-width="1.5"><title>Icarus, measured: 6.42e-06 s/s</title></circle>
+<circle cx="609.6" cy="138.5" r="6" fill="#a9cd8e" stroke="#1c1815" stroke-width="1.5"><title>Verilator, measured: 0.000838 s/s</title></circle>
+<text x="8" y="173" fill="#ede5d9" font-size="14">Cycle-level architecture</text>
+<text x="240" y="173" text-anchor="end" fill="#988d82" font-size="12">L4</text>
+<rect x="546.2" y="160" width="65.8" height="17" rx="4" fill="#dcad61" fill-opacity="0.28" stroke="#dcad61" stroke-dasharray="4 3"/>
+<text x="8" y="203" fill="#ede5d9" font-size="14">Hardware emulation</text>
+<text x="240" y="203" text-anchor="end" fill="#988d82" font-size="12">L3</text>
+<rect x="602.2" y="190" width="19.8" height="17" rx="4" fill="#dcad61" fill-opacity="0.28" stroke="#dcad61" stroke-dasharray="4 3"/>
+<text x="8" y="233" fill="#ede5d9" font-size="14">FPGA prototype</text>
+<text x="240" y="233" text-anchor="end" fill="#988d82" font-size="12">L3</text>
+<rect x="645.0" y="220" width="32.9" height="17" rx="4" fill="#dcad61" fill-opacity="0.28" stroke="#dcad61" stroke-dasharray="4 3"/>
+<text x="8" y="263" fill="#ede5d9" font-size="14">TLM virtual platform (LT)</text>
+<text x="240" y="263" text-anchor="end" fill="#988d82" font-size="12">L4/6</text>
+<rect x="645.0" y="250" width="32.9" height="17" rx="4" fill="#dcad61" fill-opacity="0.28" stroke="#dcad61" stroke-dasharray="4 3"/>
+<text x="8" y="293" fill="#ede5d9" font-size="14">QEMU dynamic translation</text>
+<text x="240" y="293" text-anchor="end" fill="#988d82" font-size="12">L6</text>
+<rect x="668.0" y="280" width="23.0" height="17" rx="4" fill="#73b9b4" fill-opacity="0.28" stroke="#73b9b4"/>
+<text x="8" y="323" fill="#ede5d9" font-size="14">System DES (LLM serving)</text>
+<text x="240" y="323" text-anchor="end" fill="#988d82" font-size="12">L5</text>
+<rect x="743.8" y="310" width="98.8" height="17" rx="4" fill="#dcad61" fill-opacity="0.28" stroke="#dcad61" stroke-dasharray="4 3"/>
+<circle cx="807.0" cy="318.5" r="6" fill="#a9cd8e" stroke="#1c1815" stroke-width="1.5"><title>event per step: 835 s/s</title></circle>
+<circle cx="816.0" cy="318.5" r="6" fill="#a9cd8e" stroke="#1c1815" stroke-width="1.5"><title>fast path: 1.57e+03 s/s</title></circle>
+<text x="8" y="353" fill="#ede5d9" font-size="14">Analytical models</text>
+<text x="240" y="353" text-anchor="end" fill="#988d82" font-size="12">L4/5</text>
+<rect x="842.5" y="340" width="164.6" height="17" rx="4" fill="#dcad61" fill-opacity="0.28" stroke="#dcad61" stroke-dasharray="4 3"/>
+<g font-size="12"><rect x="254" y="420" width="620" height="24" rx="4" fill="#231e1a" stroke="#403831"/>
+<rect x="264" y="427" width="22" height="11" rx="3" fill="#dcad61" fill-opacity="0.28" stroke="#dcad61"/>
+<text x="292" y="436" fill="#ede5d9">indicative band</text>
+<rect x="414" y="427" width="22" height="11" rx="3" fill="#73b9b4" fill-opacity="0.28" stroke="#73b9b4"/>
+<text x="442" y="436" fill="#ede5d9">cited (paper)</text>
+<rect x="564" y="427" width="22" height="11" rx="3" fill="#ba9ecc" fill-opacity="0.28" stroke="#ba9ecc"/>
+<text x="592" y="436" fill="#ede5d9">worked estimate</text>
+<circle cx="720" cy="432" r="6" fill="#a9cd8e"/><text x="732" y="436" fill="#ede5d9">measured on this PC</text></g>
+</svg>
+  <div class="cols cols-3" style="margin-top:.3em;">
+    <div class="card amber">
+      <h3 class="a">Reading it</h3>
+      <p>Rows run from most physical detail (top) to least. Bands are orders of magnitude and each spans decades, because model size matters as much as the level. Indicative bands follow <a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-03">InfSim 01's ladder</a> (large SoC, 1 GHz); QEMU is from Bellard (2005); FDTD is the worked estimate on the <a href="#/6">field-solver slide</a>.</p>
+    </div>
+    <div class="card green">
+      <h3 class="g">Measured here</h3>
+      <p>Icarus and <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-verilator">Verilator</a> on a small NTT core sit at and beyond the fast end of the RTL band, because the core is small; the SimPy serving simulator runs 835&times; to 1,566&times; faster than real time. Scripts in <a href="https://github.com/BrendanJamesLynskey/Introduction_to_Simulation/tree/main/demo">demo/</a>.</p>
+    </div>
+    <div class="card purple">
+      <h3 class="p">Effort</h3>
+      <p>Detail costs model-building time and calibration data: a <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-roofline">roofline</a> takes an afternoon; a validated cycle-level or meshed 3-D model takes weeks; RTL arrives late. The trade-off is named in <a href="https://brendanjameslynskey.github.io/SimEng_13_PPA_Tradeoffs/#slide-12">SimEng 13: The Other Trade-offs</a>; feel the spread in <a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-05">InfSim 01's calculator</a>.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 28 — HOW TO CHOOSE ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">25</span>
+    <h2>How to Choose a Level</h2>
+  </div>
+  <div class="cols cols-4060">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Questions to ask first</h3>
+        <ol style="padding-left:1.2em;">
+          <li>Which decision will the answer change, and how accurate must it be to change it?</li>
+          <li>What is the smallest unit of time and data that affects the answer?</li>
+          <li>How much simulated time, or how many samples, do you need? A p99 needs hours of traffic; a reflection needs nanoseconds</li>
+          <li>What can you calibrate and validate against?</li>
+          <li>When do you need it, and who will maintain it?</li>
+        </ol>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">The rule of thumb</h3>
+        <p>Use the highest level that can answer the question, and drop to a lower level only for the part that needs it, through a hand-over model or co-simulation. Detail you cannot calibrate is not accuracy.</p>
+      </div>
+    </div>
+    <div>
+      <table class="tight">
+        <tr><th>Question</th><th>Level and method</th><th>Why</th></tr>
+        <tr><td>Impedance of a new board stack-up</td><td>1: 2-D field solver</td><td>Geometry and materials set it</td></tr>
+        <tr><td>Eye opening at 28 GBd through a backplane</td><td>1&ndash;2: S-parameters, then channel simulation with IBIS-AMI</td><td>Nanoseconds of waveform; statistical BER</td></tr>
+        <tr><td>Will the converter ring on a load step?</td><td>2: averaged model, then PWL switching simulation</td><td>Milliseconds of switching</td></tr>
+        <tr><td>Does the RTL meet its specification?</td><td>3: RTL simulation against a golden model</td><td>Exact logic; regressions in a compiled simulator</td></tr>
+        <tr><td>How big should the on-chip SRAM be?</td><td>4: analytical sweep, then DES</td><td>Hundreds of design points</td></tr>
+        <tr><td>p99 time-to-first-token under bursty traffic</td><td>5: system DES with <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-warmup">replications</a></td><td>Hours of traffic, many seeds</td></tr>
+        <tr><td>Will the driver boot before silicon?</td><td>6: virtual platform</td><td>Billions of instructions, no timing</td></tr>
+        <tr><td>Yield of a large die under process variation</td><td>Analytical yield model, then Monte Carlo</td><td>Closed forms, then the variation</td></tr>
+      </table>
+      <p class="src" style="margin-top:.3em;">Worked versions: <a href="https://brendanjameslynskey.github.io/InfSim_04_Simulator_Landscape/#slide-01">InfSim 04: Which Question, Which Level?</a> · <a href="https://brendanjameslynskey.github.io/InfSim_04_Simulator_Landscape/#slide-08">Build or Reuse?</a> · <a href="https://brendanjameslynskey.github.io/SimEng_13_PPA_Tradeoffs/#slide-06">SimEng 13: Dies per Wafer and Yield</a></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 29 — TAKEAWAYS ═══════════════════════════════ -->
+<section data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">26</span>
+    <h2>Takeaways</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">What to remember</h3>
+        <ul>
+          <li>Six levels, from fields on a mesh to software on a modelled CPU; each trades detail for speed and reach, and hands a reduced model to the level above</li>
+          <li>Two ways to advance time: steps for continuous state, events for discrete changes; real simulators mix them</li>
+          <li>Explicit methods are limited by stability (CFL, h &lt; 2&tau;); implicit methods by the cost of a solve per step. Stiff problems need implicit methods</li>
+          <li>Adaptive steps need help at discontinuities: breakpoints, or event-driven segments</li>
+          <li>Stochastic answers need seeds, <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-warmup">replications and confidence intervals</a>; deterministic ones need reproducibility</li>
+          <li>Verification, validation and calibration are different jobs, and calibration data must not double as validation data</li>
+          <li>Choose the highest level that answers the question</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3 class="g">Next steps</h3>
+        <ol style="padding-left:1.2em;">
+          <li>Run the <a href="#/21">four-solver demo</a> until the stability limit and the breakpoint effect are obvious</li>
+          <li>Build a discrete-event kernel in 30 lines: <a href="https://brendanjameslynskey.github.io/InfSim_02_Simulator_Development_Tutorial/">InfSim 02</a></li>
+          <li>Time Icarus against <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-verilator">Verilator</a> on a design of your own with <a href="https://github.com/BrendanJamesLynskey/Introduction_to_Simulation/tree/main/demo/rtl_speed">demo/rtl_speed</a></li>
+          <li>Pick a level you rarely use and read its "On this GitHub" links</li>
+        </ol>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Further reading</h3>
+        <p>Law, <em>Simulation Modeling and Analysis</em> (discrete-event) · Hairer &amp; Wanner, <em>Solving ODEs II</em> (stiff problems) · Taflove &amp; Hagness, <em>Computational Electrodynamics: The FDTD Method</em> · Sargent (2013) on V&amp;V · the reading lists in <a href="https://brendanjameslynskey.github.io/InfSim_10_Further_Learning/">InfSim 10</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 30 — WHERE TO GO NEXT ═══════════════════════════════ -->
+<section data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">27</span>
+    <h2>Where to Go Next</h2>
+  </div>
+  <table class="tight">
+    <tr><th>Level</th><th>Start here</th><th>Then</th></tr>
+    <tr><td>1 Physics</td><td><a href="https://brendanjameslynskey.github.io/Signal_Integrity/">Signal Integrity series</a> (17 decks; computed by a field solver)</td><td><a href="https://brendanjameslynskey.github.io/Matrix_Methods_Network_Parameters/">Matrix Methods in Network Parameters</a> · <a href="https://github.com/BrendanJamesLynskey/Matrix_Articles">Matrix Articles models</a> · <a href="https://brendanjameslynskey.github.io/Numerical_Methods/">Numerical Methods</a></td></tr>
+    <tr><td>2 Circuit</td><td><a href="https://brendanjameslynskey.github.io/DCDC_Control_Techniques/">DC-DC Control Techniques</a></td><td><a href="https://brendanjameslynskey.github.io/SerDes_Equalisation/">SerDes Equalisation</a> · <a href="https://brendanjameslynskey.github.io/Matrix_Concepts_Digital_Filters/">Matrix Concepts in Digital Filters</a></td></tr>
+    <tr><td>3 Digital logic</td><td><a href="https://brendanjameslynskey.github.io/SystemVerilog_Simulators/">Free SystemVerilog Simulators</a></td><td><a href="https://brendanjameslynskey.github.io/SimEng_05_Verification_Bridge_cocotb/">SimEng 05: verification bridge</a> · <a href="https://github.com/BrendanJamesLynskey/RTL_CoSim_NTT">RTL_CoSim_NTT</a> · <a href="https://github.com/BrendanJamesLynskey/Hardware">Hardware index</a> (RTL repos)</td></tr>
+    <tr><td>4 Architecture</td><td><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/">LLM Inference Simulators</a> (InfSim 01&ndash;11)</td><td><a href="https://brendanjameslynskey.github.io/FHE_Hub_Accelerator_Simulators/">FHE Accelerator Simulators</a> · <a href="https://brendanjameslynskey.github.io/SimEng_03_SystemC_TLM_Models/">SimEng 03: SystemC TLM</a> · <a href="https://brendanjameslynskey.github.io/SimEng_04_Memory_Systems_DRAM_HBM/">SimEng 04: memory systems</a> · <a href="https://brendanjameslynskey.github.io/SimEng_13_PPA_Tradeoffs/">SimEng 13: PPA</a></td></tr>
+    <tr><td>5 System</td><td><a href="https://brendanjameslynskey.github.io/InfSim_05_Disaggregated_Inference/">InfSim 05: Disaggregated Inference</a></td><td><a href="https://brendanjameslynskey.github.io/InfSim_06_Metrics_Hotspots_Validation/">InfSim 06: metrics and validation</a> · <a href="https://brendanjameslynskey.github.io/Wilmott_QF_14_Numerical_Methods/">Wilmott 14: Monte Carlo</a> · <a href="https://brendanjameslynskey.github.io/Markov_Chain_Visualisation/">Markov chains</a></td></tr>
+    <tr><td>6 Software</td><td><a href="https://brendanjameslynskey.github.io/RISC_V/">RISC-V deck</a> (instruction stepper)</td><td><a href="https://github.com/BrendanJamesLynskey/Interview_RISC_V">Interview_RISC_V</a> · <a href="https://brendanjameslynskey.github.io/Cortex_M/">Cortex-M series</a></td></tr>
+    <tr><td>Engineering a simulator</td><td><a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/">Simulation Engineering Toolkit</a> (13 decks)</td><td>Rust and PyO3 ports, testing, Jenkins, specifications, performance analysis, measurement tools</td></tr>
+  </table>
+  <div class="cols cols-2" style="margin-top:.5em;">
+    <div class="card amber">
+      <h3 class="a">The three simulation series</h3>
+      <p><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/">LLM Inference Simulators</a> (why and how to simulate inference hardware) · <a href="https://brendanjameslynskey.github.io/FHE_Hub_Accelerator_Simulators/">FHE Accelerator Simulators</a> (one accelerator, end to end) · <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/">Simulation Engineering Toolkit</a> (the engineering around a simulator). Each hub has a glossary linking every concept to the slides that explain it.</p>
+    </div>
+    <div class="card blue">
+      <h3 class="b">Indexes</h3>
+      <p><a href="https://github.com/BrendanJamesLynskey/Hardware">Hardware</a> · <a href="https://github.com/BrendanJamesLynskey/Software">Software</a> · <a href="https://github.com/BrendanJamesLynskey/Mathematics">Mathematics</a></p>
+    </div>
+  </div>
+</section>
+
+
+</div><!-- /.slides -->
+</div><!-- /.reveal -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  slideNumber: 'c/t',
+  transition: 'fade',
+  transitionSpeed: 'fast',
+  controls: true,
+  progress: true,
+  center: false,
+  width: 1100,
+  height: 900,
+  margin: 0.01,
+  plugins: [RevealHighlight],
+  highlight: { theme: 'monokai' }
+});
+</script>
+<script>
+(function(){
+  var h = Reveal.getConfig().height || 900;
+  var m = Reveal.getConfig().margin || 0.02;
+  var maxH = Math.floor(h * (1 - 2 * m)) + 'px';
+  function fixSlides(){
+    document.querySelectorAll('.reveal .slides>section,.reveal .slides>section>section').forEach(function(s){
+      s.style.display = 'block';
+      s.style.maxHeight = maxH;
+    });
+  }
+  Reveal.on('ready', fixSlides);
+  Reveal.on('slidechanged', fixSlides);
+})();
+</script>
+<script>
+// "Interactive: One Circuit, Four Solvers": a line-for-line port of demo/rc_solvers.py.
+// Keep the floating-point operations in the same order as the Python, so the readouts match it.
+(function(){
+  var TAU = 1.0, PERIOD = 4.0, HALF = PERIOD / 2, T_END = 5 * PERIOD;
+  var H_LIST = [0.05, 0.1, 0.2, 0.25, 0.5, 1.0, 1.5, 1.9, 2.0, 2.2, 2.5];
+  var TOL_LIST = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8];
+
+  function u(t) { return (t % PERIOD) < HALF ? 1.0 : 0.0; }
+  function uLeft(t) {
+    var ph = t % PERIOD;
+    if (ph === 0) return t === 0 ? 1.0 : 0.0;
+    return ph <= HALF ? 1.0 : 0.0;
+  }
+  function exact(t) {
+    var k = Math.min(Math.trunc(t / HALF), Math.trunc(T_END / HALF) - 1);
+    var v = 0.0, decay = Math.exp(-HALF / TAU);
+    for (var i = 0; i < k; i++) { var ui = i % 2 === 0 ? 1.0 : 0.0; v = ui + (v - ui) * decay; }
+    var uk = k % 2 === 0 ? 1.0 : 0.0;
+    return uk + (v - uk) * Math.exp(-(t - k * HALF) / TAU);
+  }
+  function f(t, v) { return (u(t) - v) / TAU; }
+
+  function fixed(method, h) {
+    var ts = [0.0], vs = [0.0], n = 0, t = 0.0, v = 0.0, evals = 0;
+    while (t < T_END) {
+      n += 1;
+      var t1 = Math.min(n * h, T_END), dt = t1 - t;
+      if (method === 'fe') v = v + dt * f(t, v);
+      else v = (v + dt * uLeft(t1) / TAU) / (1 + dt / TAU);
+      evals += 1; t = t1; ts.push(t); vs.push(v);
+    }
+    return { ts: ts, vs: vs, steps: n, rejected: 0, evals: evals };
+  }
+
+  var C = [0, 1 / 5, 3 / 10, 4 / 5, 8 / 9, 1, 1];
+  var A = [[],
+    [1 / 5],
+    [3 / 40, 9 / 40],
+    [44 / 45, -56 / 15, 32 / 9],
+    [19372 / 6561, -25360 / 2187, 64448 / 6561, -212 / 729],
+    [9017 / 3168, -355 / 33, 46732 / 5247, 49 / 176, -5103 / 18656],
+    [35 / 384, 0, 500 / 1113, 125 / 192, -2187 / 6784, 11 / 84]];
+  var B5 = [35 / 384, 0, 500 / 1113, 125 / 192, -2187 / 6784, 11 / 84, 0];
+  var B4 = [5179 / 57600, 0, 7571 / 16695, 393 / 640, -92097 / 339200, 187 / 2100, 1 / 40];
+
+  function rk45(tol, breakpoints) {
+    var ts = [0.0], vs = [0.0], t = 0.0, v = 0.0, h = 0.1, steps = 0, rejected = 0, evals = 0;
+    while (t < T_END) {
+      h = Math.min(h, T_END - t);
+      var t1 = t + h, uh = 0;
+      if (breakpoints) {
+        var nxt = (Math.floor(t / HALF) + 1) * HALF;
+        if (nxt <= t1) { h = nxt - t; t1 = nxt; }
+        uh = u(t);
+      }
+      var k = [];
+      for (var i = 0; i < 7; i++) {
+        var vi = v;
+        for (var j = 0; j < i; j++) vi = vi + h * A[i][j] * k[j];
+        k.push(breakpoints ? (uh - vi) / TAU : f(t + C[i] * h, vi));
+      }
+      evals += 7;
+      var v5 = v, v4 = v;
+      for (var i2 = 0; i2 < 7; i2++) { v5 = v5 + h * B5[i2] * k[i2]; v4 = v4 + h * B4[i2] * k[i2]; }
+      var scale = tol + tol * Math.max(Math.abs(v), Math.abs(v5));
+      var err = Math.abs(v5 - v4) / scale;
+      if (err <= 1.0) { t = t1; v = v5; steps += 1; ts.push(t); vs.push(v); }
+      else rejected += 1;
+      var fac = err === 0 ? 5.0 : Math.min(5.0, Math.max(0.2, 0.9 * Math.pow(err, -0.2)));
+      h = h * fac;
+    }
+    return { ts: ts, vs: vs, steps: steps, rejected: rejected, evals: evals };
+  }
+
+  function event() {
+    var ts = [0.0], vs = [0.0], v = 0.0, decay = Math.exp(-HALF / TAU), n = Math.trunc(T_END / HALF);
+    for (var i = 0; i < n; i++) {
+      var ui = i % 2 === 0 ? 1.0 : 0.0;
+      v = ui + (v - ui) * decay; ts.push((i + 1) * HALF); vs.push(v);
+    }
+    return { ts: ts, vs: vs, steps: n, rejected: 0, evals: n };
+  }
+
+  function solve(method, x) {
+    var r = (method === 'fe' || method === 'be') ? fixed(method, x) : method === 'rk45' ? rk45(x, false) :
+            method === 'rk45bp' ? rk45(x, true) : event();
+    var e = 0;
+    for (var i = 0; i < r.ts.length; i++) e = Math.max(e, Math.abs(r.vs[i] - exact(r.ts[i])));
+    r.max_error = e;
+    return r;
+  }
+  window.rcDemo = { solve: solve, H_LIST: H_LIST, TOL_LIST: TOL_LIST };
+
+  var NAMES = { fe: 'Forward Euler', be: 'Backward Euler', rk45: 'Dormand–Prince 5(4)',
+                rk45bp: 'D–P, edges as breakpoints', event: 'Event-driven (exact)' };
+  var ORDER = ['fe', 'be', 'rk45', 'rk45bp', 'event'];
+  var W = 1000, H = 300, PL = 56, PR = 30, PT = 14, PB = 36, Y0 = -0.25, Y1 = 1.25;
+  function X(t) { return PL + t / T_END * (W - PL - PR); }
+  function Y(v) { return PT + (Y1 - v) / (Y1 - Y0) * (H - PT - PB); }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#93887d'; }
+  function fmt(e) { return e === 0 ? '0' : (e < 1e-3 || e >= 1e4) ? e.toExponential(2) : e.toPrecision(3); }
+
+  function draw() {
+    var svg = document.getElementById('rc-plot');
+    if (!svg) return;
+    var hi = +document.getElementById('rc-h').value, ti = +document.getElementById('rc-tol').value;
+    var h = H_LIST[hi], tol = Math.pow(10, -ti), sel = document.getElementById('rc-method').value;
+    document.getElementById('rc-h-out').textContent = h + ' τ';
+    document.getElementById('rc-tol-out').textContent = '1e-' + ti;
+    var muted = css('--muted'), border = css('--border'), amber = css('--amber'), green = css('--green'), text = css('--text');
+    var o = ['<defs><clipPath id="rc-clip"><rect x="' + PL + '" y="' + PT + '" width="' + (W - PL - PR) + '" height="' + (H - PT - PB) + '"/></clipPath></defs>'];
+    [0, 0.5, 1].forEach(function (v) {
+      o.push('<line x1="' + PL + '" x2="' + (W - PR) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="' + border + '"/>');
+      o.push('<text x="' + (PL - 8) + '" y="' + (Y(v) + 5) + '" text-anchor="end" font-size="15" fill="' + muted + '">' + v + ' V</text>');
+    });
+    for (var t = 0; t <= T_END; t += 4) o.push('<text x="' + X(t) + '" y="' + (H - 12) + '" text-anchor="' + (t === T_END ? 'end' : 'middle') + '" font-size="15" fill="' + muted + '">' + t + ' ms</text>');
+    var p = 'M' + X(0) + ',' + Y(1);
+    for (var e = 1; e <= 10; e++) { p += ' H' + X(e * HALF) + ' V' + Y(e % 2 === 0 ? 1 : 0); }
+    o.push('<path d="' + p + '" fill="none" stroke="' + border + '" stroke-width="2" stroke-dasharray="6 4"/>');
+    var q = '';
+    for (var s = 0; s <= 400; s++) { var tt = s / 400 * T_END; q += (s ? ' L' : 'M') + X(tt).toFixed(1) + ',' + Y(exact(tt)).toFixed(1); }
+    o.push('<path d="' + q + '" fill="none" stroke="' + green + '" stroke-width="2.5"/>');
+    var r = solve(sel, sel === 'fe' || sel === 'be' ? h : tol), g = '<g clip-path="url(#rc-clip)">', pts = '';
+    for (var i = 0; i < r.ts.length; i++) {
+      var yv = Math.max(Y0 - 1, Math.min(Y1 + 1, r.vs[i]));
+      pts += (i ? ' L' : 'M') + X(r.ts[i]).toFixed(1) + ',' + Y(yv).toFixed(1);
+      if (r.ts.length <= 450) g += '<circle cx="' + X(r.ts[i]).toFixed(1) + '" cy="' + Y(yv).toFixed(1) + '" r="3.5" fill="' + amber + '"/>';
+    }
+    // the event-driven solver knows the closed form between events, so its points are not joined by straight lines
+    var line = sel === 'event' ? '' : '<path d="' + pts + '" fill="none" stroke="' + amber + '" stroke-width="1.5"/>';
+    o.push(g.replace('<g clip-path="url(#rc-clip)">', '<g clip-path="url(#rc-clip)">' + line) + '</g>');
+    o.push('<text x="' + (PL + 10) + '" y="' + (PT + 18) + '" font-size="15" fill="' + green + '">exact</text>');
+    o.push('<text x="' + (PL + 70) + '" y="' + (PT + 18) + '" font-size="15" fill="' + amber + '">' + NAMES[sel] + (sel === 'event' ? ': the state at each edge' : '') + '</text>');
+    o.push('<text x="' + (PL + 470) + '" y="' + (PT + 18) + '" font-size="15" fill="' + muted + '">input (dashed)</text>');
+    var off = r.vs.some(function (v) { return v < Y0 || v > Y1; });
+    if (off) o.push('<text x="' + (W - PR - 8) + '" y="' + (PT + 18) + '" text-anchor="end" font-size="15" fill="' + text + '">points off the scale: unstable</text>');
+    svg.innerHTML = o.join('');
+    var rows = ORDER.map(function (m) {
+      var x = m === 'fe' || m === 'be' ? h : m === 'event' ? null : tol, rr = solve(m, x);
+      var setting = m === 'fe' || m === 'be' ? 'h = ' + h + ' τ' : m === 'event' ? '10 edges' : 'tol = 1e-' + ti;
+      return '<tr' + (m === sel ? ' class="sel"' : '') + ' data-m="' + m + '"><td>' + NAMES[m] + '</td><td>' + setting + '</td><td>' + rr.steps +
+             '</td><td>' + rr.rejected + '</td><td>' + rr.evals + '</td><td>' + fmt(rr.max_error) + '</td></tr>';
+    });
+    document.querySelector('#rc-table tbody').innerHTML = rows.join('');
+  }
+  ['rc-h', 'rc-tol', 'rc-method'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) { el.addEventListener('input', draw); el.addEventListener('change', draw); }
+  });
+  Reveal.on('ready', draw);
+  draw();
+})();
+</script>
+</body>
+</html>
