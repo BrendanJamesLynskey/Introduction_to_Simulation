@@ -605,7 +605,7 @@ A system is stiff when it mixes very different time constants: picosecond parasi
 
 On the RC circuit of the next slide, forward Euler at h = 2.2τ ends 25.8 V off a 1 V signal; backward Euler at the same step stays within 0.708 V. Adaptive Dormand–Prince at a tolerance of 10⁻⁶ needs 2,660 evaluations and rejects 218 steps; told where the edges are, it needs 560 and its error falls from 2.4 &times; 10<sup>&minus;4</sup> V to 2.5 &times; 10<sup>&minus;7</sup> V.
 
-J. R. Dormand, P. J. Prince, [A family of embedded Runge–Kutta formulae, 1980](https://doi.org/10.1016/0771-050X(80)90013-3) · E. Hairer, G. Wanner, [Solving Ordinary Differential Equations II: Stiff and Differential-Algebraic Problems](https://doi.org/10.1007/978-3-642-05221-7)
+J. R. Dormand, P. J. Prince, [A family of embedded Runge–Kutta formulae, 1980](https://doi.org/10.1016/0771-050X%2880%2990013-3) · E. Hairer, G. Wanner, [Solving Ordinary Differential Equations II: Stiff and Differential-Algebraic Problems](https://doi.org/10.1007/978-3-642-05221-7)
 
 ### On this GitHub
 
