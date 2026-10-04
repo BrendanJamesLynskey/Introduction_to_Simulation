@@ -222,7 +222,7 @@
       <div class="card amber">
         <h3 class="a">Part I: the levels</h3>
         <ul>
-          <li>What a simulation is; the levels at a glance</li>
+          <li>What a simulation is; why simulate, and when not to; the levels at a glance</li>
           <li>Level 1: physics and numerical methods (FEM, FDTD, MoM, CFD, TCAD)</li>
           <li>Level 2: circuits (SPICE, switching simulators, IBIS and IBIS-AMI)</li>
           <li>Level 3: digital logic (event-driven, cycle-based, gate level, emulation, FPGA prototypes)</li>
@@ -283,6 +283,7 @@
           <li>You cannot see inside it: the current in a via, the occupancy of a queue</li>
           <li>You want a thousand what-ifs, not one</li>
         </ul>
+        <p style="margin-top:.2em;">The <a href="#/3">next slide</a> takes nine motivations in turn.</p>
       </div>
     </div>
     <div>
@@ -309,10 +310,103 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 04 — LEVELS AT A GLANCE ═══════════════════════════════ -->
-<section data-background-color="#1c1815">
+<!-- ═══════════════════════════════ SLIDE 04 — WHY SIMULATE ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
     <span class="tag">03</span>
+    <h2>Why Simulate?</h2>
+  </div>
+  <table class="tight">
+    <tr><th>Motivation</th><th>What it buys</th><th>An example in this deck</th></tr>
+    <tr><td><span class="a">Architectural and design-space exploration</span></td><td>Compare options while change is cheap</td><td>Sizing on-chip SRAM: an analytical sweep, then DES (<a href="#/30">How to Choose a Level</a>)</td></tr>
+    <tr><td><span class="a">Functional verification</span></td><td>Does the design do what the specification says?</td><td>RTL against a golden model, with coverage and regressions in CI (<a href="#/13">Level 3</a>)</td></tr>
+    <tr><td><span class="a">Performance and power prediction</span></td><td>Throughput, latency and energy before the hardware exists</td><td>Energy per FHE bootstrap under a power cap (<a href="https://brendanjameslynskey.github.io/FHESim_05_Results_and_Design_Space/#slide-05">FHESim 05: Power and Energy per Bootstrap</a>)</td></tr>
+    <tr><td><span class="g">Pre-silicon software, HW/SW co-design</span></td><td>Firmware and drivers start before the chip</td><td>Virtual platforms (<a href="#/19">Level 6</a>)</td></tr>
+    <tr><td><span class="g">Debug and visibility</span></td><td>Every signal and state observable, as real hardware rarely is</td><td>Emulators keep full visibility; FPGA prototypes keep little (<a href="#/14">Gate Level, Emulation and FPGA Prototypes</a>)</td></tr>
+    <tr><td><span class="g">What-if, capacity planning and sizing</span></td><td>Load, failures and scaling, before they happen</td><td>Hours of serving traffic in seconds (<a href="#/17">Level 5</a>)</td></tr>
+    <tr><td><span class="p">Experiments that are impossible, dangerous or too costly</span></td><td>Crashes, faults and extreme physics; evidence for safety and certification</td><td>Failures too rare to test for (<a href="#/18">Monte Carlo</a>); credibility rules such as <a href="https://standards.nasa.gov/standard/NASA/NASA-STD-7009">NASA-STD-7009</a></td></tr>
+    <tr><td><span class="p">Training and learning</span></td><td>Operators and learning agents practise where mistakes are free</td><td>FAA-qualified <a href="https://www.faa.gov/about/initiatives/nsp">flight simulators</a>; RL in <a href="https://gymnasium.farama.org/">Gymnasium</a>; <a href="https://brendanjameslynskey.github.io/RC-Flight-Line/">RC Flight Line</a> here</td></tr>
+  </table>
+  <div class="cols cols-2" style="margin-top:.4em;">
+    <div class="card amber">
+      <h3 class="a">The payoff: cost, schedule, risk</h3>
+      <p>A mistake is cheapest to fix in a model. In a NIST study's example (software, marked "example only"), a design-stage defect that costs 1&times; to fix at once costs 10&times; at system test and 30&times; after release; published ratios vary widely. For a chip, a late mistake can mean a respin (<a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-01">InfSim 01: The Pre-Silicon Problem</a>).</p>
+      <p class="src">NIST Planning Report 02-3, <a href="https://www.nist.gov/system/files/documents/director/planning/report02-3.pdf">The Economic Impacts of Inadequate Infrastructure for Software Testing</a> (RTI, 2002), Table 5-1</p>
+    </div>
+    <div class="card gh">
+      <h3>On this GitHub</h3>
+      <ul>
+        <li><a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-02">InfSim 01: Four Jobs a Simulator Does</a>: the chip-design view of the same list</li>
+        <li><a href="https://brendanjameslynskey.github.io/InfSim_05_Disaggregated_Inference/#slide-07">InfSim 05: Six Experiments to Try</a>: what-ifs on prefill and decode pool splits</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 05 — MOTIVATION LEVEL TOOL ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">04</span>
+    <h2>Motivation, Level and Tool</h2>
+  </div>
+  <p class="cap">Each motivation tends to live at one or two of the six levels, defined on <a href="#/6">The Levels at a Glance</a>. Tools are typical examples, not recommendations. Interview practice: <a href="https://github.com/BrendanJamesLynskey/Interview_Simulation/blob/main/01_foundations/why_simulate.md">Interview_Simulation, why simulate</a>.</p>
+  <table class="tight">
+    <tr><th>Motivation</th><th>Usual level(s)</th><th>Typical tools</th><th>Go deeper</th></tr>
+    <tr><td>Architectural exploration</td><td>4 Architecture, 5 System; analytical first</td><td>Spreadsheets and <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-roofline">rooflines</a>, SimPy DES, gem5, SystemC TLM</td><td><a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-02">InfSim 01: Four Jobs a Simulator Does</a> · <a href="https://brendanjameslynskey.github.io/FHESim_05_Results_and_Design_Space/#slide-06">FHESim 05: Design-Space Map</a> · <a href="https://brendanjameslynskey.github.io/SimEng_13_PPA_Tradeoffs/#slide-08">SimEng 13: Pareto Fronts</a></td></tr>
+    <tr><td>Functional verification</td><td>3 Digital logic (2 for analogue and mixed-signal)</td><td>Icarus, <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-verilator">Verilator</a>, commercial simulators; <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-cocotb">cocotb</a>, UVM, assertions</td><td><a href="https://brendanjameslynskey.github.io/SimEng_05_Verification_Bridge_cocotb/#slide-04">SimEng 05: Two Golden Models and a Scoreboard</a> · <a href="https://brendanjameslynskey.github.io/SystemVerilog_Simulators/">Free SystemVerilog Simulators</a> · <a href="https://github.com/BrendanJamesLynskey/Interview_SystemVerilog">Interview_SystemVerilog</a></td></tr>
+    <tr><td>Performance and power prediction</td><td>4, 5; 3 for RTL power</td><td>DES or cycle-level models with a power model; RTL switching activity</td><td><a href="https://brendanjameslynskey.github.io/InfSim_07_Power_and_Energy/#slide-03">InfSim 07: The Simulator's Power Model</a> · <a href="https://brendanjameslynskey.github.io/SimEng_05_Verification_Bridge_cocotb/#slide-13">SimEng 05: Switching Activity as a Power Proxy</a></td></tr>
+    <tr><td>Pre-silicon software, HW/SW co-design</td><td>6 Software; 3 emulation and FPGA prototypes</td><td>Instruction-set simulators, QEMU, virtual prototypes, emulators</td><td><a href="#/19">Level 6: Software Virtual Platforms</a> · <a href="https://brendanjameslynskey.github.io/RISC_V/#/21">RISC-V: Mini RISC-V Stepper</a> (an instruction-set simulator)</td></tr>
+    <tr><td>Debug and visibility</td><td>3 (waveforms); 4&ndash;5 (traces)</td><td>Waveform viewers; <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-perfetto">Perfetto</a> traces; <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-hotspot">hot-spot attribution</a></td><td><a href="https://brendanjameslynskey.github.io/InfSim_06_Metrics_Hotspots_Validation/#slide-04">InfSim 06: Hot-Spot Attribution</a> · <a href="https://brendanjameslynskey.github.io/FHESim_03_Simulating_an_FHE_Accelerator/#slide-08">FHESim 03: Metrics and Hot-Spots</a></td></tr>
+    <tr><td>What-if, capacity and sizing</td><td>5 System</td><td>DES, queueing models, network simulators (ns-3), Monte Carlo</td><td><a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim">Disaggregated_Inference_Sim</a> · <a href="https://brendanjameslynskey.github.io/InfSim_05_Disaggregated_Inference/#slide-06">InfSim 05: Run the Simulator</a></td></tr>
+    <tr><td>Impossible or dangerous experiments; safety evidence</td><td>1 Physics, 2 Circuit; Monte Carlo at any level</td><td>FEM, CFD and crash solvers; fault injection; importance sampling</td><td><a href="#/10">CFD, TCAD and Multiphysics</a> · <a href="#/18">Monte Carlo and Variance Reduction</a> · <a href="#/28">Verification, Validation and Calibration</a></td></tr>
+    <tr><td>Training and learning</td><td>Real-time models, often with hardware in the loop</td><td>Flight and driving simulators; RL environments</td><td><a href="#/26">Co-Simulation and Hardware-in-the-Loop</a> · <a href="https://github.com/BrendanJamesLynskey/RC-Flight-Line">RC-Flight-Line</a> (a blade-element flight model)</td></tr>
+    <tr><td>Cost, schedule and risk</td><td>Every level; cheapest at the highest one that answers</td><td>Whatever finds the mistake earliest</td><td><a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-01">InfSim 01: The Pre-Silicon Problem</a> · <a href="#/30">How to Choose a Level</a></td></tr>
+  </table>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 06 — WRONG TOOL ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">05</span>
+    <h2>When Simulation Is the Wrong Tool</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Do not simulate when&hellip;</h3>
+        <ul>
+          <li><span class="a">An analytical answer is enough</span>: a bound, a mean or a <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-roofline">roofline</a> answers the question, and nothing queues, contends or feeds back (<a href="#/15">Level 4: Analytical and Discrete-Event</a>)</li>
+          <li><span class="a">The model cannot be validated</span>: no measurement, reference or second simulator to check it against, so its precision is false (<a href="#/28">Verification, Validation and Calibration</a>)</li>
+          <li><span class="a">Measuring the real thing is cheaper</span>: the system exists and can be loaded, profiled and timed (<a href="https://brendanjameslynskey.github.io/SimEng_12_Measurement_Tools_and_Methods/#slide-05">SimEng 12: Benchmarks and Load Generators</a>)</li>
+          <li><span class="a">The model costs more than the decision</span>: it would take longer to build and calibrate than the decision can wait, or nobody will maintain it (<a href="#/29">Speed, Accuracy and Effort</a>)</li>
+          <li><span class="a">There is no question yet</span>: a simulator built without one grows detail that answers nothing (<a href="https://brendanjameslynskey.github.io/InfSim_04_Simulator_Landscape/#slide-08">InfSim 04: Build or Reuse?</a>)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3 class="g">What to do instead</h3>
+        <ul>
+          <li>Write the closed form or the spreadsheet first, and simulate only the part with dynamics: queues, contention, feedback, distributions</li>
+          <li>Measure, prototype or put hardware in the loop when the real system, or part of it, exists (<a href="#/14">FPGA prototypes</a>, <a href="#/26">hardware-in-the-loop</a>)</li>
+          <li>Combine them: measure what you can, simulate the rest, and calibrate the model on the measurements</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">A test before you start</h3>
+        <p>Name the decision the simulation will change, the accuracy it needs, and what you will validate against. If you cannot name all three, the simulator is not ready to be built (<a href="#/30">How to Choose a Level</a>).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 07 — LEVELS AT A GLANCE ═══════════════════════════════ -->
+<section data-background-color="#1c1815">
+  <div class="slide-hdr">
+    <span class="tag">06</span>
     <h2>The Levels at a Glance</h2>
   </div>
   <table class="tight">
@@ -340,7 +434,7 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 05 — PART I ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 08 — PART I ═══════════════════════════════ -->
 <section class="part" data-background-color="#1c1815">
   <div style="max-width:860px; margin:0 auto; padding: 3em 0 0;">
     <div style="font-family:'Geist Mono',monospace; font-size:.5em; color:var(--amber); letter-spacing:.12em; margin-bottom:.4em;">PART I</div>
@@ -359,10 +453,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 06 — LEVEL 1 PHYSICS ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 09 — LEVEL 1 PHYSICS ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">04</span>
+    <span class="tag">07</span>
     <h2>Level 1: Physics and Numerical Methods</h2>
   </div>
   <div class="cols cols-6040">
@@ -404,10 +498,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 07 — FIELD SOLVERS ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 10 — FIELD SOLVERS ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">05</span>
+    <span class="tag">08</span>
     <h2>Field Solvers: FDTD, FEM and MoM</h2>
   </div>
   <div class="cols cols-2">
@@ -451,10 +545,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 08 — CFD TCAD MULTIPHYSICS ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 11 — CFD TCAD MULTIPHYSICS ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">06</span>
+    <span class="tag">09</span>
     <h2>CFD, TCAD and Multiphysics</h2>
   </div>
   <div class="cols cols-2">
@@ -495,10 +589,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 09 — LEVEL 2 SPICE ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 12 — LEVEL 2 SPICE ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">07</span>
+    <span class="tag">10</span>
     <h2>Level 2: Circuits, and What SPICE Does</h2>
   </div>
   <div class="cols cols-6040">
@@ -513,7 +607,7 @@
         </ul>
         <div class="eq">[ G &nbsp;B ; C &nbsp;D ] &middot; [ v ; i ] = [ i<sub>s</sub> ; v<sub>s</sub> ] &nbsp;&nbsp;(the MNA system, re-solved every iteration)</div>
       </div>
-      <p class="cap">Also: DC operating point (Newton, no time), AC small-signal (one complex solve per frequency), noise. The <a href="#/21">interactive demo</a> is a one-node transient problem, solved four ways.</p>
+      <p class="cap">Also: DC operating point (Newton, no time), AC small-signal (one complex solve per frequency), noise. The <a href="#/24">interactive demo</a> is a one-node transient problem, solved four ways.</p>
       <div class="card gh" style="margin-top:0.4em;">
         <h3>On this GitHub</h3>
         <ul>
@@ -541,10 +635,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 10 — SWITCHING + BEHAVIOURAL ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 13 — SWITCHING + BEHAVIOURAL ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">08</span>
+    <span class="tag">11</span>
     <h2>Switching and Behavioural Models</h2>
   </div>
   <div class="cols cols-2">
@@ -556,7 +650,7 @@
           <li><span class="a">Piecewise-linear (PWL) switching simulators</span>, in the style of SIMPLIS: each switch and device is a few linear segments, each linear topology is solved exactly between switching events, and the simulator only has to find when the next switching event happens. It can also search for the periodic steady state directly</li>
           <li><span class="a">Averaged models</span>: replace the switching by its average over a cycle, for loop design and stability</li>
         </ul>
-        <p>The event-driven solver in the <a href="#/21">demo</a> uses the same idea on an RC circuit.</p>
+        <p>The event-driven solver in the <a href="#/24">demo</a> uses the same idea on an RC circuit.</p>
       </div>
       <div class="card green" style="margin-top:0.4em;">
         <h3 class="g">Behavioural models</h3>
@@ -594,10 +688,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 11 — LEVEL 3 LOGIC ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 14 — LEVEL 3 LOGIC ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">09</span>
+    <span class="tag">12</span>
     <h2>Level 3: Digital Logic, Event-Driven and Cycle-Based</h2>
   </div>
   <div class="cols cols-2">
@@ -640,10 +734,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 12 — GATE LEVEL, EMULATION, FPGA ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 15 — GATE LEVEL, EMULATION, FPGA ═══════════════════════════════ -->
 <section data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">10</span>
+    <span class="tag">13</span>
     <h2>Gate Level, Emulation and FPGA Prototypes</h2>
   </div>
   <div class="cols cols-2">
@@ -688,10 +782,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 13 — LEVEL 4 ARCH I ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 16 — LEVEL 4 ARCH I ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">11</span>
+    <span class="tag">14</span>
     <h2>Level 4: Architecture, Analytical and Discrete-Event</h2>
   </div>
   <div class="cols cols-2">
@@ -729,10 +823,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 14 — ARCH II ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 17 — ARCH II ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">12</span>
+    <span class="tag">15</span>
     <h2>Architecture: Transaction-Level and Cycle-Level</h2>
   </div>
   <div class="cols cols-2">
@@ -774,10 +868,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 15 — LEVEL 5 SYSTEM ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 18 — LEVEL 5 SYSTEM ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">13</span>
+    <span class="tag">16</span>
     <h2>Level 5: System, Network and Cloud</h2>
   </div>
   <div class="cols cols-2">
@@ -820,10 +914,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 16 — MONTE CARLO ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 19 — MONTE CARLO ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">14</span>
+    <span class="tag">17</span>
     <h2>Monte Carlo and Variance Reduction</h2>
   </div>
   <div class="cols cols-2">
@@ -865,10 +959,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 17 — LEVEL 6 VIRTUAL PLATFORMS ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 20 — LEVEL 6 VIRTUAL PLATFORMS ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">15</span>
+    <span class="tag">18</span>
     <h2>Level 6: Software Virtual Platforms</h2>
   </div>
   <div class="cols cols-2">
@@ -910,10 +1004,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 18 — ONE ACCELERATOR, EVERY LEVEL ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 21 — ONE ACCELERATOR, EVERY LEVEL ═══════════════════════════════ -->
 <section data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">16</span>
+    <span class="tag">19</span>
     <h2>One Accelerator, Every Level</h2>
   </div>
   <p>The FHE accelerator work on this GitHub models one design at five levels, and each level checks or feeds another. It is a compact example of how the levels work together on a real project.</p>
@@ -943,7 +1037,7 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 19 — PART II ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 22 — PART II ═══════════════════════════════ -->
 <section class="part" data-background-color="#1c1815">
   <div style="max-width:860px; margin:0 auto; padding: 3em 0 0;">
     <div style="font-family:'Geist Mono',monospace; font-size:.5em; color:var(--green); letter-spacing:.12em; margin-bottom:.4em;">PART II</div>
@@ -954,10 +1048,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 20 — TIME-STEPPING VS EVENT-DRIVEN ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 23 — TIME-STEPPING VS EVENT-DRIVEN ═══════════════════════════════ -->
 <section data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">17</span>
+    <span class="tag">20</span>
     <h2>Time-Stepping and Event-Driven</h2>
   </div>
   <svg class="diagram" viewBox="0 0 1040 250" width="100%" role="img" aria-label="Three timelines: fixed time steps, adaptive time steps crowding at an input edge, and irregular events popped from a priority queue">
@@ -1008,10 +1102,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 21 — STIFFNESS ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 24 — STIFFNESS ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">18</span>
+    <span class="tag">21</span>
     <h2>Stiffness, Stability and Step Control</h2>
   </div>
   <div class="cols cols-2">
@@ -1051,10 +1145,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 22 — INTERACTIVE ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 25 — INTERACTIVE ═══════════════════════════════ -->
 <section data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">19</span>
+    <span class="tag">22</span>
     <h2>Interactive: One Circuit, Four Solvers</h2>
   </div>
   <p style="font-size:.46em; margin:0 0 .2em;">An RC low-pass filter (&tau; = RC = 1 ms) driven by a 0&ndash;1 V square wave of period 4&tau;, simulated for 20&tau; (10 edges). Error is the largest |v &minus; v<sub>exact</sub>| at the solver's own time points. Every row is reproduced by <a href="https://github.com/BrendanJamesLynskey/Introduction_to_Simulation/blob/main/demo/rc_solvers.py">demo/rc_solvers.py</a>.</p>
@@ -1079,10 +1173,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 23 — STOCHASTIC ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 26 — STOCHASTIC ═══════════════════════════════ -->
 <section data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">20</span>
+    <span class="tag">23</span>
     <h2>Deterministic and Stochastic</h2>
   </div>
   <div class="cols cols-2">
@@ -1124,10 +1218,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 24 — CO-SIMULATION ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 27 — CO-SIMULATION ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">21</span>
+    <span class="tag">24</span>
     <h2>Co-Simulation and Hardware-in-the-Loop</h2>
   </div>
   <div class="cols cols-2">
@@ -1164,10 +1258,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 25 — DIGITAL TWINS ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 28 — DIGITAL TWINS ═══════════════════════════════ -->
 <section data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">22</span>
+    <span class="tag">25</span>
     <h2>Digital Twins, Defined Carefully</h2>
   </div>
   <div class="card amber">
@@ -1199,10 +1293,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 26 — V&V ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 29 — V&V ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">23</span>
+    <span class="tag">26</span>
     <h2>Verification, Validation and Calibration</h2>
   </div>
   <div class="cols cols-2">
@@ -1253,10 +1347,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 27 — SPEED ACCURACY EFFORT ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 30 — SPEED ACCURACY EFFORT ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">24</span>
+    <span class="tag">27</span>
     <h2>Speed, Accuracy and Effort</h2>
   </div>
 <svg class="diagram" viewBox="0 0 1060 456" width="100%" role="img" aria-label="Simulated seconds per wall-clock second for each level of simulation, on a log scale">
@@ -1339,7 +1433,7 @@
   <div class="cols cols-3" style="margin-top:.3em;">
     <div class="card amber">
       <h3 class="a">Reading it</h3>
-      <p>Rows run from most physical detail (top) to least. Bands are orders of magnitude and each spans decades, because model size matters as much as the level. Indicative bands follow <a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-03">InfSim 01's ladder</a> (large SoC, 1 GHz); QEMU is from Bellard (2005); FDTD is the worked estimate on the <a href="#/6">field-solver slide</a>.</p>
+      <p>Rows run from most physical detail (top) to least. Bands are orders of magnitude and each spans decades, because model size matters as much as the level. Indicative bands follow <a href="https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-03">InfSim 01's ladder</a> (large SoC, 1 GHz); QEMU is from Bellard (2005); FDTD is the worked estimate on the <a href="#/9">field-solver slide</a>.</p>
     </div>
     <div class="card green">
       <h3 class="g">Measured here</h3>
@@ -1353,10 +1447,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 28 — HOW TO CHOOSE ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 31 — HOW TO CHOOSE ═══════════════════════════════ -->
 <section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">25</span>
+    <span class="tag">28</span>
     <h2>How to Choose a Level</h2>
   </div>
   <div class="cols cols-4060">
@@ -1394,10 +1488,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 29 — TAKEAWAYS ═══════════════════════════════ -->
-<section data-background-color="#1c1815">
+<!-- ═══════════════════════════════ SLIDE 32 — TAKEAWAYS ═══════════════════════════════ -->
+<section class="dense" data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">26</span>
+    <span class="tag">29</span>
     <h2>Takeaways</h2>
   </div>
   <div class="cols cols-2">
@@ -1405,6 +1499,7 @@
       <div class="card amber">
         <h3 class="a">What to remember</h3>
         <ul>
+          <li><a href="#/3">Why simulate</a>: to explore, verify, predict, start software early, see inside, ask what-if, do what reality will not allow, and train; not when an analytical answer or a measurement is cheaper</li>
           <li>Six levels, from fields on a mesh to software on a modelled CPU; each trades detail for speed and reach, and hands a reduced model to the level above</li>
           <li>Two ways to advance time: steps for continuous state, events for discrete changes; real simulators mix them</li>
           <li>Explicit methods are limited by stability (CFL, h &lt; 2&tau;); implicit methods by the cost of a solve per step. Stiff problems need implicit methods</li>
@@ -1419,7 +1514,7 @@
       <div class="card green">
         <h3 class="g">Next steps</h3>
         <ol style="padding-left:1.2em;">
-          <li>Run the <a href="#/21">four-solver demo</a> until the stability limit and the breakpoint effect are obvious</li>
+          <li>Run the <a href="#/24">four-solver demo</a> until the stability limit and the breakpoint effect are obvious</li>
           <li>Build a discrete-event kernel in 30 lines: <a href="https://brendanjameslynskey.github.io/InfSim_02_Simulator_Development_Tutorial/">InfSim 02</a></li>
           <li>Time Icarus against <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-verilator">Verilator</a> on a design of your own with <a href="https://github.com/BrendanJamesLynskey/Introduction_to_Simulation/tree/main/demo/rtl_speed">demo/rtl_speed</a></li>
           <li>Pick a level you rarely use and read its "On this GitHub" links</li>
@@ -1434,10 +1529,10 @@
 </section>
 
 
-<!-- ═══════════════════════════════ SLIDE 30 — WHERE TO GO NEXT ═══════════════════════════════ -->
+<!-- ═══════════════════════════════ SLIDE 33 — WHERE TO GO NEXT ═══════════════════════════════ -->
 <section data-background-color="#1c1815">
   <div class="slide-hdr">
-    <span class="tag">27</span>
+    <span class="tag">30</span>
     <h2>Where to Go Next</h2>
   </div>
   <table class="tight">

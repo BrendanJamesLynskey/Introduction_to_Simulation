@@ -16,33 +16,36 @@ Model  |  Solve  |  Measure  |  Validate
 
 - [01 · Topics](#slide-01--topics)
 - [02 · What a Simulation Is](#slide-02--what-a-simulation-is)
-- [03 · The Levels at a Glance](#slide-03--the-levels-at-a-glance)
+- [03 · Why Simulate?](#slide-03--why-simulate)
+- [04 · Motivation, Level and Tool](#slide-04--motivation-level-and-tool)
+- [05 · When Simulation Is the Wrong Tool](#slide-05--when-simulation-is-the-wrong-tool)
+- [06 · The Levels at a Glance](#slide-06--the-levels-at-a-glance)
 - **[Part I — The Levels](#part-i--the-levels)**
-- [04 · Level 1: Physics and Numerical Methods](#slide-04--level-1-physics-and-numerical-methods)
-- [05 · Field Solvers: FDTD, FEM and MoM](#slide-05--field-solvers-fdtd-fem-and-mom)
-- [06 · CFD, TCAD and Multiphysics](#slide-06--cfd-tcad-and-multiphysics)
-- [07 · Level 2: Circuits, and What SPICE Does](#slide-07--level-2-circuits-and-what-spice-does)
-- [08 · Switching and Behavioural Models](#slide-08--switching-and-behavioural-models)
-- [09 · Level 3: Digital Logic, Event-Driven and Cycle-Based](#slide-09--level-3-digital-logic-event-driven-and-cycle-based)
-- [10 · Gate Level, Emulation and FPGA Prototypes](#slide-10--gate-level-emulation-and-fpga-prototypes)
-- [11 · Level 4: Architecture, Analytical and Discrete-Event](#slide-11--level-4-architecture-analytical-and-discrete-event)
-- [12 · Architecture: Transaction-Level and Cycle-Level](#slide-12--architecture-transaction-level-and-cycle-level)
-- [13 · Level 5: System, Network and Cloud](#slide-13--level-5-system-network-and-cloud)
-- [14 · Monte Carlo and Variance Reduction](#slide-14--monte-carlo-and-variance-reduction)
-- [15 · Level 6: Software Virtual Platforms](#slide-15--level-6-software-virtual-platforms)
-- [16 · One Accelerator, Every Level](#slide-16--one-accelerator-every-level)
+- [07 · Level 1: Physics and Numerical Methods](#slide-07--level-1-physics-and-numerical-methods)
+- [08 · Field Solvers: FDTD, FEM and MoM](#slide-08--field-solvers-fdtd-fem-and-mom)
+- [09 · CFD, TCAD and Multiphysics](#slide-09--cfd-tcad-and-multiphysics)
+- [10 · Level 2: Circuits, and What SPICE Does](#slide-10--level-2-circuits-and-what-spice-does)
+- [11 · Switching and Behavioural Models](#slide-11--switching-and-behavioural-models)
+- [12 · Level 3: Digital Logic, Event-Driven and Cycle-Based](#slide-12--level-3-digital-logic-event-driven-and-cycle-based)
+- [13 · Gate Level, Emulation and FPGA Prototypes](#slide-13--gate-level-emulation-and-fpga-prototypes)
+- [14 · Level 4: Architecture, Analytical and Discrete-Event](#slide-14--level-4-architecture-analytical-and-discrete-event)
+- [15 · Architecture: Transaction-Level and Cycle-Level](#slide-15--architecture-transaction-level-and-cycle-level)
+- [16 · Level 5: System, Network and Cloud](#slide-16--level-5-system-network-and-cloud)
+- [17 · Monte Carlo and Variance Reduction](#slide-17--monte-carlo-and-variance-reduction)
+- [18 · Level 6: Software Virtual Platforms](#slide-18--level-6-software-virtual-platforms)
+- [19 · One Accelerator, Every Level](#slide-19--one-accelerator-every-level)
 - **[Part II — Cross-Cutting Methods](#part-ii--cross-cutting-methods)**
-- [17 · Time-Stepping and Event-Driven](#slide-17--time-stepping-and-event-driven)
-- [18 · Stiffness, Stability and Step Control](#slide-18--stiffness-stability-and-step-control)
-- [19 · Interactive: One Circuit, Four Solvers](#slide-19--interactive-one-circuit-four-solvers)
-- [20 · Deterministic and Stochastic](#slide-20--deterministic-and-stochastic)
-- [21 · Co-Simulation and Hardware-in-the-Loop](#slide-21--co-simulation-and-hardware-in-the-loop)
-- [22 · Digital Twins, Defined Carefully](#slide-22--digital-twins-defined-carefully)
-- [23 · Verification, Validation and Calibration](#slide-23--verification-validation-and-calibration)
-- [24 · Speed, Accuracy and Effort](#slide-24--speed-accuracy-and-effort)
-- [25 · How to Choose a Level](#slide-25--how-to-choose-a-level)
-- [26 · Takeaways](#slide-26--takeaways)
-- [27 · Where to Go Next](#slide-27--where-to-go-next)
+- [20 · Time-Stepping and Event-Driven](#slide-20--time-stepping-and-event-driven)
+- [21 · Stiffness, Stability and Step Control](#slide-21--stiffness-stability-and-step-control)
+- [22 · Interactive: One Circuit, Four Solvers](#slide-22--interactive-one-circuit-four-solvers)
+- [23 · Deterministic and Stochastic](#slide-23--deterministic-and-stochastic)
+- [24 · Co-Simulation and Hardware-in-the-Loop](#slide-24--co-simulation-and-hardware-in-the-loop)
+- [25 · Digital Twins, Defined Carefully](#slide-25--digital-twins-defined-carefully)
+- [26 · Verification, Validation and Calibration](#slide-26--verification-validation-and-calibration)
+- [27 · Speed, Accuracy and Effort](#slide-27--speed-accuracy-and-effort)
+- [28 · How to Choose a Level](#slide-28--how-to-choose-a-level)
+- [29 · Takeaways](#slide-29--takeaways)
+- [30 · Where to Go Next](#slide-30--where-to-go-next)
 
 ---
 
@@ -50,7 +53,7 @@ Model  |  Solve  |  Measure  |  Validate
 
 ### Part I: the levels
 
-- What a simulation is; the levels at a glance
+- What a simulation is; why simulate, and when not to; the levels at a glance
 - Level 1: physics and numerical methods (FEM, FDTD, MoM, CFD, TCAD)
 - Level 2: circuits (SPICE, switching simulators, IBIS and IBIS-AMI)
 - Level 3: digital logic (event-driven, cycle-based, gate level, emulation, FPGA prototypes)
@@ -95,6 +98,8 @@ A simulation advances a model of a system through time, or across many parameter
 - You cannot see inside it: the current in a via, the occupancy of a queue
 - You want a thousand what-ifs, not one
 
+The [next slide](#slide-03--why-simulate) takes nine motivations in turn.
+
 ### Four words that get confused
 
 - **Analysis**: a closed-form or static answer with no time evolution: a DC operating point, a [roofline](https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-roofline), static timing analysis
@@ -112,7 +117,73 @@ Questions 2 and 3 are the same at every level, which is why Part II exists.
 
 ---
 
-## Slide 03 — The Levels at a Glance
+## Slide 03 — Why Simulate?
+
+| Motivation | What it buys | An example in this deck |
+|---|---|---|
+| **Architectural and design-space exploration** | Compare options while change is cheap | Sizing on-chip SRAM: an analytical sweep, then DES ([How to Choose a Level](#slide-28--how-to-choose-a-level)) |
+| **Functional verification** | Does the design do what the specification says? | RTL against a golden model, with coverage and regressions in CI ([Level 3](#slide-12--level-3-digital-logic-event-driven-and-cycle-based)) |
+| **Performance and power prediction** | Throughput, latency and energy before the hardware exists | Energy per FHE bootstrap under a power cap ([FHESim 05: Power and Energy per Bootstrap](https://brendanjameslynskey.github.io/FHESim_05_Results_and_Design_Space/#slide-05)) |
+| **Pre-silicon software, HW/SW co-design** | Firmware and drivers start before the chip | Virtual platforms ([Level 6](#slide-18--level-6-software-virtual-platforms)) |
+| **Debug and visibility** | Every signal and state observable, as real hardware rarely is | Emulators keep full visibility; FPGA prototypes keep little ([Gate Level, Emulation and FPGA Prototypes](#slide-13--gate-level-emulation-and-fpga-prototypes)) |
+| **What-if, capacity planning and sizing** | Load, failures and scaling, before they happen | Hours of serving traffic in seconds ([Level 5](#slide-16--level-5-system-network-and-cloud)) |
+| **Experiments that are impossible, dangerous or too costly** | Crashes, faults and extreme physics; evidence for safety and certification | Failures too rare to test for ([Monte Carlo](#slide-17--monte-carlo-and-variance-reduction)); credibility rules such as [NASA-STD-7009](https://standards.nasa.gov/standard/NASA/NASA-STD-7009) |
+| **Training and learning** | Operators and learning agents practise where mistakes are free | FAA-qualified [flight simulators](https://www.faa.gov/about/initiatives/nsp); RL in [Gymnasium](https://gymnasium.farama.org/); [RC Flight Line](https://brendanjameslynskey.github.io/RC-Flight-Line/) here |
+
+### The payoff: cost, schedule, risk
+
+A mistake is cheapest to fix in a model. In a NIST study's example (software, marked "example only"), a design-stage defect that costs 1× to fix at once costs 10× at system test and 30× after release; published ratios vary widely. For a chip, a late mistake can mean a respin ([InfSim 01: The Pre-Silicon Problem](https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-01)).
+
+*NIST Planning Report 02-3, [The Economic Impacts of Inadequate Infrastructure for Software Testing](https://www.nist.gov/system/files/documents/director/planning/report02-3.pdf) (RTI, 2002), Table 5-1*
+
+### On this GitHub
+
+- [InfSim 01: Four Jobs a Simulator Does](https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-02): the chip-design view of the same list
+- [InfSim 05: Six Experiments to Try](https://brendanjameslynskey.github.io/InfSim_05_Disaggregated_Inference/#slide-07): what-ifs on prefill and decode pool splits
+
+---
+
+## Slide 04 — Motivation, Level and Tool
+
+Each motivation tends to live at one or two of the six levels, defined on [The Levels at a Glance](#slide-06--the-levels-at-a-glance). Tools are typical examples, not recommendations. Interview practice: [Interview_Simulation, why simulate](https://github.com/BrendanJamesLynskey/Interview_Simulation/blob/main/01_foundations/why_simulate.md).
+
+| Motivation | Usual level(s) | Typical tools | Go deeper |
+|---|---|---|---|
+| Architectural exploration | 4 Architecture, 5 System; analytical first | Spreadsheets and [rooflines](https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-roofline), SimPy DES, gem5, SystemC TLM | [InfSim 01: Four Jobs a Simulator Does](https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-02) · [FHESim 05: Design-Space Map](https://brendanjameslynskey.github.io/FHESim_05_Results_and_Design_Space/#slide-06) · [SimEng 13: Pareto Fronts](https://brendanjameslynskey.github.io/SimEng_13_PPA_Tradeoffs/#slide-08) |
+| Functional verification | 3 Digital logic (2 for analogue and mixed-signal) | Icarus, [Verilator](https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-verilator), commercial simulators; [cocotb](https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/#g-cocotb), UVM, assertions | [SimEng 05: Two Golden Models and a Scoreboard](https://brendanjameslynskey.github.io/SimEng_05_Verification_Bridge_cocotb/#slide-04) · [Free SystemVerilog Simulators](https://brendanjameslynskey.github.io/SystemVerilog_Simulators/) · [Interview_SystemVerilog](https://github.com/BrendanJamesLynskey/Interview_SystemVerilog) |
+| Performance and power prediction | 4, 5; 3 for RTL power | DES or cycle-level models with a power model; RTL switching activity | [InfSim 07: The Simulator's Power Model](https://brendanjameslynskey.github.io/InfSim_07_Power_and_Energy/#slide-03) · [SimEng 05: Switching Activity as a Power Proxy](https://brendanjameslynskey.github.io/SimEng_05_Verification_Bridge_cocotb/#slide-13) |
+| Pre-silicon software, HW/SW co-design | 6 Software; 3 emulation and FPGA prototypes | Instruction-set simulators, QEMU, virtual prototypes, emulators | [Level 6: Software Virtual Platforms](#slide-18--level-6-software-virtual-platforms) · [RISC-V: Mini RISC-V Stepper](https://brendanjameslynskey.github.io/RISC_V/#/21) (an instruction-set simulator) |
+| Debug and visibility | 3 (waveforms); 4–5 (traces) | Waveform viewers; [Perfetto](https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-perfetto) traces; [hot-spot attribution](https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-hotspot) | [InfSim 06: Hot-Spot Attribution](https://brendanjameslynskey.github.io/InfSim_06_Metrics_Hotspots_Validation/#slide-04) · [FHESim 03: Metrics and Hot-Spots](https://brendanjameslynskey.github.io/FHESim_03_Simulating_an_FHE_Accelerator/#slide-08) |
+| What-if, capacity and sizing | 5 System | DES, queueing models, network simulators (ns-3), Monte Carlo | [Disaggregated_Inference_Sim](https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim) · [InfSim 05: Run the Simulator](https://brendanjameslynskey.github.io/InfSim_05_Disaggregated_Inference/#slide-06) |
+| Impossible or dangerous experiments; safety evidence | 1 Physics, 2 Circuit; Monte Carlo at any level | FEM, CFD and crash solvers; fault injection; importance sampling | [CFD, TCAD and Multiphysics](#slide-09--cfd-tcad-and-multiphysics) · [Monte Carlo and Variance Reduction](#slide-17--monte-carlo-and-variance-reduction) · [Verification, Validation and Calibration](#slide-26--verification-validation-and-calibration) |
+| Training and learning | Real-time models, often with hardware in the loop | Flight and driving simulators; RL environments | [Co-Simulation and Hardware-in-the-Loop](#slide-24--co-simulation-and-hardware-in-the-loop) · [RC-Flight-Line](https://github.com/BrendanJamesLynskey/RC-Flight-Line) (a blade-element flight model) |
+| Cost, schedule and risk | Every level; cheapest at the highest one that answers | Whatever finds the mistake earliest | [InfSim 01: The Pre-Silicon Problem](https://brendanjameslynskey.github.io/InfSim_01_Why_Simulate/#slide-01) · [How to Choose a Level](#slide-28--how-to-choose-a-level) |
+
+---
+
+## Slide 05 — When Simulation Is the Wrong Tool
+
+### Do not simulate when…
+
+- **An analytical answer is enough**: a bound, a mean or a [roofline](https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-roofline) answers the question, and nothing queues, contends or feeds back ([Level 4: Analytical and Discrete-Event](#slide-14--level-4-architecture-analytical-and-discrete-event))
+- **The model cannot be validated**: no measurement, reference or second simulator to check it against, so its precision is false ([Verification, Validation and Calibration](#slide-26--verification-validation-and-calibration))
+- **Measuring the real thing is cheaper**: the system exists and can be loaded, profiled and timed ([SimEng 12: Benchmarks and Load Generators](https://brendanjameslynskey.github.io/SimEng_12_Measurement_Tools_and_Methods/#slide-05))
+- **The model costs more than the decision**: it would take longer to build and calibrate than the decision can wait, or nobody will maintain it ([Speed, Accuracy and Effort](#slide-27--speed-accuracy-and-effort))
+- **There is no question yet**: a simulator built without one grows detail that answers nothing ([InfSim 04: Build or Reuse?](https://brendanjameslynskey.github.io/InfSim_04_Simulator_Landscape/#slide-08))
+
+### What to do instead
+
+- Write the closed form or the spreadsheet first, and simulate only the part with dynamics: queues, contention, feedback, distributions
+- Measure, prototype or put hardware in the loop when the real system, or part of it, exists ([FPGA prototypes](#slide-13--gate-level-emulation-and-fpga-prototypes), [hardware-in-the-loop](#slide-24--co-simulation-and-hardware-in-the-loop))
+- Combine them: measure what you can, simulate the rest, and calibrate the model on the measurements
+
+### A test before you start
+
+Name the decision the simulation will change, the accuracy it needs, and what you will validate against. If you cannot name all three, the simulator is not ready to be built ([How to Choose a Level](#slide-28--how-to-choose-a-level)).
+
+---
+
+## Slide 06 — The Levels at a Glance
 
 | Level | What is solved | How time advances | Unit of time · unit of data | Typical methods |
 |---|---|---|---|---|
@@ -140,7 +211,7 @@ Six levels, from fields on a mesh to software on a modelled CPU. For each: what 
 
 ---
 
-## Slide 04 — Level 1: Physics and Numerical Methods
+## Slide 07 — Level 1: Physics and Numerical Methods
 
 ### What is solved
 
@@ -169,7 +240,7 @@ A result is credible only after a **refinement study**: shrink the cells until t
 
 ---
 
-## Slide 05 — Field Solvers: FDTD, FEM and MoM
+## Slide 08 — Field Solvers: FDTD, FEM and MoM
 
 ### Three ways to solve Maxwell's equations
 
@@ -205,7 +276,7 @@ K. S. Yee, [IEEE Trans. Antennas Propag., 1966](https://doi.org/10.1109/TAP.1966
 
 ---
 
-## Slide 06 — CFD, TCAD and Multiphysics
+## Slide 09 — CFD, TCAD and Multiphysics
 
 ### Computational fluid dynamics
 
@@ -235,7 +306,7 @@ Each hand-over is a reduced-order model: the level above never sees the mesh, so
 
 ---
 
-## Slide 07 — Level 2: Circuits, and What SPICE Does
+## Slide 10 — Level 2: Circuits, and What SPICE Does
 
 ### Inside a SPICE transient run
 
@@ -248,7 +319,7 @@ Each hand-over is a reduced-order model: the level above never sees the mesh, so
 [ G  B ; C  D ] · [ v ; i ] = [ i_s ; v_s ]     (the MNA system, re-solved every iteration)
 ```
 
-Also: DC operating point (Newton, no time), AC small-signal (one complex solve per frequency), noise. The [interactive demo](#slide-19--interactive-one-circuit-four-solvers) is a one-node transient problem, solved four ways.
+Also: DC operating point (Newton, no time), AC small-signal (one complex solve per frequency), noise. The [interactive demo](#slide-22--interactive-one-circuit-four-solvers) is a one-node transient problem, solved four ways.
 
 ### Speed, accuracy, validation
 
@@ -269,7 +340,7 @@ L. W. Nagel, [SPICE2, UC Berkeley ERL M520, 1975](https://www2.eecs.berkeley.edu
 
 ---
 
-## Slide 08 — Switching and Behavioural Models
+## Slide 11 — Switching and Behavioural Models
 
 ### Power converters break SPICE's budget
 
@@ -278,7 +349,7 @@ A buck converter switches every microsecond or so, a load-transient study needs 
 - **Piecewise-linear (PWL) switching simulators**, in the style of SIMPLIS: each switch and device is a few linear segments, each linear topology is solved exactly between switching events, and the simulator only has to find when the next switching event happens. It can also search for the periodic steady state directly
 - **Averaged models**: replace the switching by its average over a cycle, for loop design and stability
 
-The event-driven solver in the [demo](#slide-19--interactive-one-circuit-four-solvers) uses the same idea on an RC circuit.
+The event-driven solver in the [demo](#slide-22--interactive-one-circuit-four-solvers) uses the same idea on an RC circuit.
 
 ### Behavioural models
 
@@ -305,7 +376,7 @@ The event-driven solver in the [demo](#slide-19--interactive-one-circuit-four-so
 
 ---
 
-## Slide 09 — Level 3: Digital Logic, Event-Driven and Cycle-Based
+## Slide 12 — Level 3: Digital Logic, Event-Driven and Cycle-Based
 
 ### Event-driven
 
@@ -338,7 +409,7 @@ RTL simulation is exact for the logic, because it *is* the design. What it needs
 
 ---
 
-## Slide 10 — Gate Level, Emulation and FPGA Prototypes
+## Slide 13 — Gate Level, Emulation and FPGA Prototypes
 
 ### Gate-level simulation
 
@@ -373,7 +444,7 @@ Rules of thumb from [InfSim 01's fidelity ladder](https://brendanjameslynskey.gi
 
 ---
 
-## Slide 11 — Level 4: Architecture, Analytical and Discrete-Event
+## Slide 14 — Level 4: Architecture, Analytical and Discrete-Event
 
 ### Analytical models
 
@@ -401,7 +472,7 @@ Analytical: microseconds per design point. DES: about 10⁵ to 10⁷ events per 
 
 ---
 
-## Slide 12 — Architecture: Transaction-Level and Cycle-Level
+## Slide 15 — Architecture: Transaction-Level and Cycle-Level
 
 ### Transaction-level modelling (SystemC TLM-2.0)
 
@@ -431,7 +502,7 @@ N. Binkert et al., [The gem5 simulator, 2011](https://doi.org/10.1145/2024716.20
 
 ---
 
-## Slide 13 — Level 5: System, Network and Cloud
+## Slide 16 — Level 5: System, Network and Cloud
 
 ### DES at system scale
 
@@ -463,7 +534,7 @@ G. F. Riley, T. R. Henderson, [The ns-3 Network Simulator, 2010](https://doi.org
 
 ---
 
-## Slide 14 — Monte Carlo and Variance Reduction
+## Slide 17 — Monte Carlo and Variance Reduction
 
 ### The method
 
@@ -498,7 +569,7 @@ A Monte Carlo answer is an estimate with an error bar: report the [confidence in
 
 ---
 
-## Slide 15 — Level 6: Software Virtual Platforms
+## Slide 18 — Level 6: Software Virtual Platforms
 
 ### Instruction-set simulators (ISS)
 
@@ -529,7 +600,7 @@ A whole platform (CPUs, bus, memory map, peripherals) as fast functional models,
 
 ---
 
-## Slide 16 — One Accelerator, Every Level
+## Slide 19 — One Accelerator, Every Level
 
 The FHE accelerator work on this GitHub models one design at five levels, and each level checks or feeds another. It is a compact example of how the levels work together on a real project.
 
@@ -560,7 +631,7 @@ The questions every level shares: how time advances, how the step is chosen, how
 
 ---
 
-## Slide 17 — Time-Stepping and Event-Driven
+## Slide 20 — Time-Stepping and Event-Driven
 
 *(Diagram: fixed steps, adaptive steps crowding at the input edges, and irregular events popped from an event queue.)*
 
@@ -582,7 +653,7 @@ Continuous dynamics with discrete events (a switch opens, a thermostat fires): i
 
 ---
 
-## Slide 18 — Stiffness, Stability and Step Control
+## Slide 21 — Stiffness, Stability and Step Control
 
 ### Explicit and implicit
 
@@ -614,7 +685,7 @@ J. R. Dormand, P. J. Prince, [A family of embedded Runge–Kutta formulae, 1980]
 
 ---
 
-## Slide 19 — Interactive: One Circuit, Four Solvers
+## Slide 22 — Interactive: One Circuit, Four Solvers
 
 An RC low-pass filter (τ = RC = 1 ms) driven by a 0–1 V square wave of period 4τ, simulated for 20τ (10 edges). Error is the largest |v − v<sub>exact</sub>| at the solver's own time points. In the deck, sliders pick the fixed step h and the tolerance, and a plot shows the chosen solver against the exact answer. The reference implementation is [demo/rc_solvers.py](demo/rc_solvers.py); its full table is [demo/results.md](demo/results.md). Some rows:
 
@@ -631,7 +702,7 @@ Try: forward Euler at h = 2.2τ (unstable) against backward Euler at the same st
 
 ---
 
-## Slide 20 — Deterministic and Stochastic
+## Slide 23 — Deterministic and Stochastic
 
 ### Deterministic models still need reproducibility
 
@@ -659,7 +730,7 @@ Same inputs, same outputs, on every run and every machine. That takes deliberate
 
 ---
 
-## Slide 21 — Co-Simulation and Hardware-in-the-Loop
+## Slide 24 — Co-Simulation and Hardware-in-the-Loop
 
 ### Co-simulation and FMI
 
@@ -685,7 +756,7 @@ The controller under test is real hardware (an engine control unit, a motor driv
 
 ---
 
-## Slide 22 — Digital Twins, Defined Carefully
+## Slide 25 — Digital Twins, Defined Carefully
 
 ### A definition worth using
 
@@ -712,7 +783,7 @@ The term is used loosely in marketing: ask which of the four properties actually
 
 ---
 
-## Slide 23 — Verification, Validation and Calibration
+## Slide 26 — Verification, Validation and Calibration
 
 ### Three different questions
 
@@ -749,13 +820,13 @@ R. G. Sargent, [Verification and validation of simulation models, J. Simulation,
 
 ---
 
-## Slide 24 — Speed, Accuracy and Effort
+## Slide 27 — Speed, Accuracy and Effort
 
 *(Chart: simulated seconds per wall-clock second, log scale, one row per method from most physical detail to least; indicative bands, one cited band, one worked estimate, and measured points.)*
 
 | Method | Level | Simulated s per wall s | Basis |
 |---|---|---|---|
-| 3-D full-wave EM (FDTD) | 1 | about 1.9 &times; 10<sup>&minus;12</sup> | worked estimate (slide 05) |
+| 3-D full-wave EM (FDTD) | 1 | about 1.9 &times; 10<sup>&minus;12</sup> | worked estimate (slide 08) |
 | SPICE, transistor level | 2 | 10⁻¹⁰ to 10⁻⁶ | indicative |
 | Gate level + SDF timing | 3 | 10⁻¹⁰ to 10⁻⁷ | indicative |
 | RTL simulation | 3 | 10⁻⁸ to 10⁻⁵ | indicative (large SoC at 1 GHz); measured on a small core: Icarus 6,416 and Verilator 837,883 cycles/s |
@@ -781,7 +852,7 @@ Detail costs model-building time and calibration data: a [roofline](https://bren
 
 ---
 
-## Slide 25 — How to Choose a Level
+## Slide 28 — How to Choose a Level
 
 ### Questions to ask first
 
@@ -810,10 +881,11 @@ Worked versions: [InfSim 04: Which Question, Which Level?](https://brendanjamesl
 
 ---
 
-## Slide 26 — Takeaways
+## Slide 29 — Takeaways
 
 ### What to remember
 
+- [Why simulate](#slide-03--why-simulate): to explore, verify, predict, start software early, see inside, ask what-if, do what reality will not allow, and train; not when an analytical answer or a measurement is cheaper
 - Six levels, from fields on a mesh to software on a modelled CPU; each trades detail for speed and reach, and hands a reduced model to the level above
 - Two ways to advance time: steps for continuous state, events for discrete changes; real simulators mix them
 - Explicit methods are limited by stability (CFL, h < 2τ); implicit methods by the cost of a solve per step. Stiff problems need implicit methods
@@ -835,7 +907,7 @@ Law, *Simulation Modeling and Analysis* (discrete-event) · Hairer & Wanner, *So
 
 ---
 
-## Slide 27 — Where to Go Next
+## Slide 30 — Where to Go Next
 
 | Level | Start here | Then |
 |---|---|---|
